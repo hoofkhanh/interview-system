@@ -1,0 +1,91 @@
+# =========================
+# Compiled class files
+# =========================
+*.class
+
+# =========================
+# Logs
+# =========================
+*.log
+
+# =========================
+# BlueJ files
+# =========================
+*.ctxt
+
+# =========================
+# Mobile Tools for Java (J2ME)
+# =========================
+.mtj.tmp/
+
+# =========================
+# Package Files
+# =========================
+*.zip
+*.tar.gz
+*.rar
+
+# =========================
+# JVM crash logs
+# =========================
+hs_err_pid*
+replay_pid*
+
+# =========================
+# Project specific / temporary
+# =========================
+temp_volume/
+.env
+HELP.md
+
+# =========================
+# Maven
+# =========================
+target/
+.mvn/wrapper/maven-wrapper.jar   # KEEP this file, do not ignore if you want wrapper to work
+
+# =========================
+# Gradle
+# =========================
+build/
+
+# =========================
+# Eclipse / STS
+# =========================
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+# =========================
+# IntelliJ IDEA
+# =========================
+.idea
+*.iws
+*.iml
+*.ipr
+
+# =========================
+# NetBeans
+# =========================
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+# =========================
+# VS Code
+# =========================
+.vscode/
+
+# =========================
+# Optional: OS temp files
+# =========================
+.DS_Store
+Thumbs.db
+*.tmp
+*.swp
