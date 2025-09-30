@@ -1,0 +1,14 @@
+eureka:
+  instance:
+    hostname: ${EUREKA_HOST:localhost}
+  client:
+    service-url:
+      defaultZone: http://${eureka.instance.hostname}:9001/eureka
+
+spring:
+  graphql:
+    graphiql:
+      enabled: true
+      path: /graphiql
+    http:
+      path: /graphql

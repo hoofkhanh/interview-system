@@ -1,0 +1,168 @@
+x-common-environment: &common-env
+  EUREKA_HOST: discovery-server
+  CONFIG_SERVER_HOST: config-server
+
+services:
+  postgres:
+    container_name: interview-system-postgres
+    image: postgres:16
+    environment: 
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      PGDATA: /var/lib/postgresql/data
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    networks:
+      - interview-system-net
+    restart: unless-stopped
+    
+  pgadmin:
+    container_name: interview-system-pgadmin
+    image: dpage/pgadmin4:9.5.0
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    ports:
+      - 80:80
+    networks:
+      - interview-system-net
+    restart: unless-stopped
+    depends_on:
+      - postgres
+      
+  mongodb:
+    container_name: interview-system-mongodb
+    image: mongo:8.0.11
+    ports:
+      - 27017:27017
+    volumes:
+      - mongo:/data/db
+      - ./temp_volume/mongo/configdb:/data/configdb
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+    networks:
+      - interview-system-net
+    restart: unless-stopped
+      
+  mongo-express:
+    container_name: interview-system-mongo-express
+    image: mongo-express:1.0.2-18
+    ports:
+      - 8081:8081
+    environment:
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+      - ME_CONFIG_BASICAUTH_USERNAME=${ME_CONFIG_BASICAUTH_USERNAME}
+      - ME_CONFIG_BASICAUTH_PASSWORD=${ME_CONFIG_BASICAUTH_PASSWORD}
+      - ME_CONFIG_MONGODB_SERVER=mongodb
+    networks:
+      - interview-system-net
+    restart: unless-stopped
+    depends_on:
+      - mongodb
+      
+  mail-dev:
+    container_name: interview-system-mail-dev
+    image: maildev/maildev:2.2.1
+    ports:
+      - 1080:1080
+      - 1025:1025
+    networks:
+      - interview-system-net
+    restart: unless-stopped
+      
+  redis:
+    image: redis:8.0.3
+    container_name: interview-system-redis
+    restart: unless-stopped
+    volumes:
+      - redis_volume_data:/data
+    ports:
+      - 6379:6379
+    networks:
+      - interview-system-net
+      
+  redis_insight:
+    image: redis/redisinsight:2.70
+    container_name: interview-system-redis-insight
+    restart: unless-stopped
+    ports:
+      - 5540:5540
+    volumes:
+      - redis_insight_volume_data:/data
+    networks:
+      - interview-system-net
+    
+  rabbitmq:
+    image: rabbitmq:4.1.2-management
+    container_name: interview-system-rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    restart: unless-stopped
+    networks:
+      - interview-system-net
+
+# services
+  config-server:
+    image: hoofkhanh/interview-system-config-server:1.0.0
+    container_name: interview-system-config-server
+    ports: 
+      -  9000:9000
+    environment:
+      <<: *common-env
+    restart: unless-stopped
+    networks:
+      - interview-system-net
+   
+  discovery-server:
+    image: hoofkhanh/interview-system-discovery-server:1.0.0
+    container_name: interview-system-discovery-server
+    ports:
+      -  9001:9001
+    environment:
+      <<: *common-env
+    depends_on:
+      -  config-server
+    restart: unless-stopped
+    networks:
+      - interview-system-net
+    
+  user-service:
+    image: hoofkhanh/interview-system-user-service:1.0.0
+    container_name: interview-system-user-service
+    ports: 
+      - 9002:9002
+    environment:
+      <<: *common-env
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: user
+      DB_USERNAME: ${POSTGRES_USER}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+    depends_on:
+      -  config-server
+      -  discovery-server
+      -  postgres
+    restart: unless-stopped
+    networks:
+      - interview-system-net
+      
+networks:
+  interview-system-net:
+    driver: bridge
+      
+volumes:
+  postgres:
+  pgadmin:
+  mongo:
+  redis_volume_data:
+  redis_insight_volume_data:
+  rabbitmq_data:
