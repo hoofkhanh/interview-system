@@ -10,5 +10,5 @@ RUN mvn clean package -pl services/interview-system-user-service -am -DskipTests
 FROM openjdk:17-jdk-slim
 WORKDIR /app
 COPY --from=build /build/services/interview-system-user-service/target/*.jar /app/user-service.jar
-EXPOSE 9001
+EXPOSE 9002
 ENTRYPOINT ["java", "-jar", "user-service.jar"]
