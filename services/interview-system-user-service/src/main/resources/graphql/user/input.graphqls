@@ -1,0 +1,9 @@
+input CreateUserInput{
+	email: String!
+	phoneNumber: String!
+	gender: Boolean!
+	firstName: String!
+	lastName: String!
+	fullName: String!
+	dateOfBirth: String!
+}
