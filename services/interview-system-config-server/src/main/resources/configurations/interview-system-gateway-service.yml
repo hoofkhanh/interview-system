@@ -1,0 +1,15 @@
+server:
+  port: 9004
+
+spring:
+  cloud:
+    gateway:
+      server:
+        webflux:
+          discovery:
+            locator:
+              enabled: true
+              lower-case-service-id: true
+              
+auth-service:
+  base-url: http://interview-system-auth-service

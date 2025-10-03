@@ -14,14 +14,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.hokhanh.mapper.UserMapper;
-import com.hokhanh.model.User;
-import com.hokhanh.repository.UserRepository;
-import com.hokhanh.request.CreateUserInput;
-import com.hokhanh.response.BaseUserPayload;
-import com.hokhanh.response.CreateUserPayload;
-import com.hokhanh.response.UserByEmailPayload;
-import com.hokhanh.service.UserService;
+import com.hokhanh.user.mapper.UserMapper;
+import com.hokhanh.user.model.User;
+import com.hokhanh.user.repository.UserRepository;
+import com.hokhanh.user.request.CreateUserInput;
+import com.hokhanh.user.response.BaseUserPayload;
+import com.hokhanh.user.response.CreateUserPayload;
+import com.hokhanh.user.response.UserByEmailPayload;
+import com.hokhanh.user.service.UserService;
 
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {

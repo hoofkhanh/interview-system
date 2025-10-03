@@ -1,0 +1,12 @@
+type RolePayload{
+	id: ID!
+	name: String!
+}
+
+type BaseAuthPayload{
+	id: ID!
+	role: RolePayload!
+	userId: ID!
+	email: String!
+	fullName: String!
+}

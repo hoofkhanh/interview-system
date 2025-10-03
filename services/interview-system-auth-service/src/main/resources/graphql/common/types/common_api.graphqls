@@ -1,0 +1,4 @@
+type BaseApiPayload{
+	success: Boolean!
+	message: String!
+}

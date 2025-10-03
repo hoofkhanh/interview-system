@@ -1,0 +1,10 @@
+type SignupInterviewerPayload{
+	otpSentAt: String!
+	otpExpirationMinutes: Int!
+}
+
+type SignupInterviewerApiPayload{
+	metadata: BaseApiPayload!
+	status: SignupApiStatusType
+	payload: SignupInterviewerPayload
+}

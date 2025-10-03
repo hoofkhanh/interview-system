@@ -111,49 +111,88 @@ services:
       - interview-system-net
 
 # services
-  config-server:
-    image: hoofkhanh/interview-system-config-server:1.0.0
-    container_name: interview-system-config-server
-    ports: 
-      -  9000:9000
-    environment:
-      <<: *common-env
-    restart: unless-stopped
-    networks:
-      - interview-system-net
-   
-  discovery-server:
-    image: hoofkhanh/interview-system-discovery-server:1.0.0
-    container_name: interview-system-discovery-server
-    ports:
-      -  9001:9001
-    environment:
-      <<: *common-env
-    depends_on:
-      -  config-server
-    restart: unless-stopped
-    networks:
-      - interview-system-net
-    
-  user-service:
-    image: hoofkhanh/interview-system-user-service:1.0.0
-    container_name: interview-system-user-service
-    ports: 
-      - 9002:9002
-    environment:
-      <<: *common-env
-      DB_HOST: postgres
-      DB_PORT: 5432
-      DB_NAME: user
-      DB_USERNAME: ${POSTGRES_USER}
-      DB_PASSWORD: ${POSTGRES_PASSWORD}
-    depends_on:
-      -  config-server
-      -  discovery-server
-      -  postgres
-    restart: unless-stopped
-    networks:
-      - interview-system-net
+#  config-server:
+#    image: hoofkhanh/interview-system-config-server:1.0.0
+#    container_name: interview-system-config-server
+#    ports: 
+#      -  9000:9000
+#    restart: unless-stopped
+#    networks:
+#      - interview-system-net
+#   
+#  discovery-server:
+#    image: hoofkhanh/interview-system-discovery-server:1.0.0
+#    container_name: interview-system-discovery-server
+#    ports:
+#      -  9001:9001
+#    environment:
+#      <<: *common-env
+#    depends_on:
+#      -  config-server
+#    restart: unless-stopped
+#    networks:
+#      - interview-system-net
+#    
+#  user-service:
+#    image: hoofkhanh/interview-system-user-service:1.0.0
+#    container_name: interview-system-user-service
+#    ports: 
+#      - 9002:9002
+#    environment:
+#      <<: *common-env
+#      DB_HOST: postgres
+#      DB_PORT: 5432
+#      DB_NAME: user
+#      DB_USERNAME: ${POSTGRES_USER}
+#      DB_PASSWORD: ${POSTGRES_PASSWORD}
+#    depends_on:
+#      -  config-server
+#      -  discovery-server
+#      -  postgres
+#    restart: unless-stopped
+#    networks:
+#      - interview-system-net
+#      
+#  auth-service:
+#    image: hoofkhanh/interview-system-auth-service:1.0.0
+#    container_name: interview-system-auth-service
+#    ports: 
+#      - 9003:9003
+#    environment:
+#      <<: *common-env
+#      DB_HOST: postgres
+#      DB_PORT: 5432
+#      DB_NAME: auth
+#      DB_USERNAME: ${POSTGRES_USER}
+#      DB_PASSWORD: ${POSTGRES_PASSWORD}
+#      REDIS_HOST: redis
+#      REDIS_PORT: 6379
+#      REDIS_DB: 0
+#      MAIL_HOST: mail-dev
+#      MAIL_PORT: 1025
+#      MAIL_USERNAME: ${MAIL_USERNAME}
+#      MAIL_PASSWORD: ${MAIL_PASSWORD}
+#    depends_on:
+#      -  config-server
+#      -  discovery-server
+#      -  postgres
+#    restart: unless-stopped
+#    networks:
+#      - interview-system-net
+#      
+#  gateway-service:
+#    image: hoofkhanh/interview-system-gateway-service:1.0.0
+#    container_name: interview-system-gateway-service
+#    ports: 
+#      - 9004:9004
+#    environment:
+#      <<: *common-env
+#    depends_on:
+#      -  config-server
+#      -  discovery-server
+#    restart: unless-stopped
+#    networks:
+#      - interview-system-net
       
 networks:
   interview-system-net:
