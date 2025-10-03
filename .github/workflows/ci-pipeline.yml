@@ -11,9 +11,11 @@ jobs:
   filter:
     runs-on: ubuntu-latest
     outputs:
-      interview-system-user-service: ${{ steps.filter.outputs.user-service }}
       interview-system-config-server: ${{ steps.filter.outputs.config-server }}
       interview-system-discovery-server: ${{ steps.filter.outputs.discovery-server }}
+      interview-system-user-service: ${{ steps.filter.outputs.user-service }}
+      interview-system-auth-service: ${{ steps.filter.outputs.auth-service }}
+      interview-system-gateway-service: ${{ steps.filter.outputs.gateway-service }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -23,14 +25,20 @@ jobs:
         uses: dorny/paths-filter@v3
         with:
           filters: |
-            user-service:
-              - 'services/interview-system-user-service/**'
-              - 'pom.xml'
             config-server:
               - 'services/interview-system-config-server/**'
               - 'pom.xml'
             discovery-server:
               - 'services/interview-system-discovery-server/**'
+              - 'pom.xml'
+            user-service:
+              - 'services/interview-system-user-service/**'
+              - 'pom.xml'
+            auth-service:
+              - 'services/interview-system-auth-service/**'
+              - 'pom.xml'
+            gateway-service:
+              - 'services/interview-system-gateway-service/**'
               - 'pom.xml'
 
   build-and-push:
@@ -39,9 +47,11 @@ jobs:
     strategy:
       matrix:
         service:
-          - interview-system-user-service
           - interview-system-config-server
           - interview-system-discovery-server
+          - interview-system-user-service
+          - interview-system-auth-service
+          - interview-system-gateway-service
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
