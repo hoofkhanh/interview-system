@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import com.hokhanh.dto.GraphQLRequest;
-import com.hokhanh.dto.GraphQLResponse;
+import com.hokhanh.common.graphql.GraphQLRequest;
+import com.hokhanh.common.graphql.GraphQLResponse;
 
 import reactor.core.publisher.Mono;
 
@@ -17,7 +17,7 @@ public class AuthClient {
 
 	@Autowired
 	private WebClient webClient;
-	
+
 	@Value("${spring.graphql.http.path}")
 	private String graphqlPath;
 

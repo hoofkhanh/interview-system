@@ -27,18 +27,23 @@ jobs:
           filters: |
             config-server:
               - 'services/interview-system-config-server/**'
+              - 'commons/**'
               - 'pom.xml'
             discovery-server:
               - 'services/interview-system-discovery-server/**'
+              - 'commons/**'
               - 'pom.xml'
             user-service:
               - 'services/interview-system-user-service/**'
+              - 'commons/**'
               - 'pom.xml'
             auth-service:
               - 'services/interview-system-auth-service/**'
+              - 'commons/**'
               - 'pom.xml'
             gateway-service:
               - 'services/interview-system-gateway-service/**'
+              - 'commons/**'
               - 'pom.xml'
 
   build-and-push:
@@ -73,6 +78,10 @@ jobs:
       - name: Build and install parent pom
         if: ${{ needs.filter.outputs[matrix.service] == 'true' }}
         run: mvn clean install -DskipTests
+
+      - name: Build and install common module
+        if: ${{ needs.filter.outputs[matrix.service] == 'true' }}
+        run: mvn clean install -pl commons/interview-system-common-libary -am -DskipTests
 
       - name: Run unit tests for ${{ matrix.service }}
         if: ${{ needs.filter.outputs[matrix.service] == 'true' }}

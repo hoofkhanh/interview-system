@@ -2,12 +2,12 @@ package com.hokhanh.user.service;
 
 import org.springframework.stereotype.Service;
 
+import com.hokhanh.common.user.request.CreateUserInput;
+import com.hokhanh.common.user.response.CreateUserPayload;
+import com.hokhanh.common.user.response.UserByEmailPayload;
 import com.hokhanh.user.mapper.UserMapper;
 import com.hokhanh.user.model.User;
 import com.hokhanh.user.repository.UserRepository;
-import com.hokhanh.user.request.CreateUserInput;
-import com.hokhanh.user.response.CreateUserPayload;
-import com.hokhanh.user.response.UserByEmailPayload;
 
 import lombok.RequiredArgsConstructor;
 

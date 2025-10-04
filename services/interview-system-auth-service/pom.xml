@@ -88,8 +88,8 @@
 		</dependency>
 		
 		<dependency>
-			<groupId>io.github.cdimascio</groupId>
-			<artifactId>dotenv-java</artifactId>
+			<groupId>com.hokhanh</groupId>
+			<artifactId>interview-system-common-libary</artifactId>
 		</dependency>
 	</dependencies>
 	

@@ -8,10 +8,10 @@ import java.security.Key;
 import java.util.Date;
 import java.util.function.Function;
 
-import com.hokhanh.utils.EnvLoaderUtil;
+import com.hokhanh.common.jwt.JwtPropertyConstants;
+
 
 public class JwtService {
-	public static final String SECRET_KEY = EnvLoaderUtil.getJwtSecretKey();
 	
 	public boolean isTokenValid(String token) {
 		return !isTokenExpired(token);
@@ -21,7 +21,7 @@ public class JwtService {
 		return extractExpiration(token).before(new Date());
 	}
 	
-	public Date extractExpiration(String token) {
+	private Date extractExpiration(String token) {
 		return extractClaim(token, Claims::getExpiration);
 	}
 	
@@ -35,7 +35,7 @@ public class JwtService {
 	}
 
 	private Key getSignInKey() {
-		byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
+		byte[] keyBytes = Decoders.BASE64.decode(JwtPropertyConstants.SECRET_KEY);
 		return Keys.hmacShaKeyFor(keyBytes);
 	}
 }

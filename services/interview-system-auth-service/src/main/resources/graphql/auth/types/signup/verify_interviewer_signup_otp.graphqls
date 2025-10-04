@@ -1,0 +1,15 @@
+enum VerifyOtpApiStatusType{
+	OTP_INVALID
+	OTP_EXPIRED
+}
+
+type VerifyInterviewerSignupOtpPayload{
+	baseAuth: BaseAuthPayload!
+	accessToken: String!
+}
+
+type VerifyInterviewerSignupOtpApiPayload{
+	metadata: BaseApiPayload!
+	status: VerifyOtpApiStatusType
+	payload: VerifyInterviewerSignupOtpPayload
+}

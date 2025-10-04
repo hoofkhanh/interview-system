@@ -25,6 +25,7 @@
 		<module>services/interview-system-user-service</module>
 		<module>services/interview-system-auth-service</module>
 		<module>services/interview-system-gateway-service</module>
+		<module>commons/interview-system-common-libary</module>
 	</modules>
 
 	<dependencies>
@@ -80,6 +81,12 @@
 				<groupId>io.github.cdimascio</groupId>
 				<artifactId>dotenv-java</artifactId>
 				<version>2.2.4</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>com.hokhanh</groupId>
+				<artifactId>interview-system-common-libary</artifactId>
+				<version>${revision}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

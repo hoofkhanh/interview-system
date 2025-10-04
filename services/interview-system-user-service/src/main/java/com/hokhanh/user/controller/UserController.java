@@ -5,9 +5,9 @@ import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
 
-import com.hokhanh.user.request.CreateUserInput;
-import com.hokhanh.user.response.CreateUserPayload;
-import com.hokhanh.user.response.UserByEmailPayload;
+import com.hokhanh.common.user.request.CreateUserInput;
+import com.hokhanh.common.user.response.CreateUserPayload;
+import com.hokhanh.common.user.response.UserByEmailPayload;
 import com.hokhanh.user.service.UserService;
 
 import jakarta.validation.Valid;

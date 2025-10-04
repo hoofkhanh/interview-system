@@ -1,3 +1,4 @@
 type Mutation {
 	signupInterviewer(input: SignupInterviewerInput!): SignupInterviewerApiPayload!
+	verifyInterviewerSignupOtp(input: VerifyInterviewerSignupOtpInput!): VerifyInterviewerSignupOtpApiPayload!
 }

@@ -40,7 +40,7 @@ public class GraphQLOperationFilter implements WebFilter{
 	private final ObjectMapper objectMapper = new ObjectMapper();
 
 	private static final List<String> PUBLIC_OPERATIONS = List.of(
-			"signupInterviewer"
+			"signupInterviewer", "verifyInterviewerSignupOtp"
 	);
 	
 	private static final List<String> INTERNAL_OPERATIONS = List.of(

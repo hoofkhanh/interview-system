@@ -1,0 +1,4 @@
+input VerifyInterviewerSignupOtpInput{
+	otp: String!
+	email: String!
+}

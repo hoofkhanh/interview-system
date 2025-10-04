@@ -1,0 +1,10 @@
+type SignupCandidatePayload{
+	baseAuth: BaseAuthPayload!
+	accessToken: String!
+}
+
+type SignupCandidateApiPayload{
+	metadata: BaseApiPayload!
+	status: SignupApiStatusType
+	payload: SignupCandidatePayload
+}

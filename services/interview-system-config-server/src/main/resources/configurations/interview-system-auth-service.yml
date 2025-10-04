@@ -41,3 +41,6 @@ spring:
   
 server:
   port: 9003
+  
+user-service:
+  base-url: http://interview-system-user-service

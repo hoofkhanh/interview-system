@@ -3,6 +3,7 @@ FROM maven:3.8.5-openjdk-17 AS build
 WORKDIR /build
 COPY pom.xml .
 COPY services ./services
+COPY commons ./commons
 RUN mvn dependency:go-offline
 RUN mvn clean package -pl services/interview-system-gateway-service -am -DskipTests
 

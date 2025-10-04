@@ -2,9 +2,9 @@ package com.hokhanh.user.mapper;
 
 import org.springframework.stereotype.Service;
 
+import com.hokhanh.common.user.request.CreateUserInput;
+import com.hokhanh.common.user.response.BaseUserPayload;
 import com.hokhanh.user.model.User;
-import com.hokhanh.user.request.CreateUserInput;
-import com.hokhanh.user.response.BaseUserPayload;
 
 
 @Service

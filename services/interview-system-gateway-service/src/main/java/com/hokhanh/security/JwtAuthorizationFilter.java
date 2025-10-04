@@ -16,17 +16,13 @@ import org.springframework.web.server.WebFilter;
 import org.springframework.web.server.WebFilterChain;
 
 import com.hokhanh.client.AuthClient;
+import com.hokhanh.common.httpHeader.HttpHeadersConstants;
 import com.hokhanh.jwt.JwtService;
 
 import reactor.core.publisher.Mono;
 
 @Component
 public class JwtAuthorizationFilter implements WebFilter{
-	
-	public static final String HEADER_AUTH_ID  = "X-Auth-Id";
-	public static final String HEADER_USER_ID  = "X-User-Id";
-	public static final String HEADER_ROLE_NAME  = "X-Role-Name";
-	
 	public static final String INTERVIEWER_ROLE = "INTERVIEWER";
 	public static final String CANDIDATE_ROLE = "CANDIDATE";
 
@@ -101,9 +97,9 @@ public class JwtAuthorizationFilter implements WebFilter{
 		return checkRole(exchange, exchange.getRequest(), roleName)
 				.switchIfEmpty(Mono.defer(() -> {
 					ServerHttpRequest mutatedRequest = exchange.getRequest().mutate()
-							.header(HEADER_AUTH_ID, authId)
-							.header(HEADER_USER_ID, userId)
-							.header(HEADER_ROLE_NAME, roleName)
+							.header(HttpHeadersConstants.HEADER_AUTH_ID, authId)
+							.header(HttpHeadersConstants.HEADER_USER_ID, userId)
+							.header(HttpHeadersConstants.HEADER_ROLE_NAME, roleName)
 							.build();
 
 					ServerWebExchange mutatedExchange = exchange.mutate().request(mutatedRequest).build();
