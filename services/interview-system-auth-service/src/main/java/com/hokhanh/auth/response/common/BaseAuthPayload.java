@@ -3,10 +3,10 @@ package com.hokhanh.auth.response.common;
 import java.util.UUID;
 
 public record BaseAuthPayload(
-	Long id,
+	UUID id,
 	RolePayload role,
 	UUID userId,
-	String emai,
+	String email,
 	String fullName
 ) {
 

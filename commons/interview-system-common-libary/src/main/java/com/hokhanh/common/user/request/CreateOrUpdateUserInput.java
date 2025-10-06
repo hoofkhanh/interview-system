@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 
-public record CreateUserInput(
+public record CreateOrUpdateUserInput(
 	@NotBlank(message = "email is required")
 	@Email(message = "email must be in correct format")
 	String email,

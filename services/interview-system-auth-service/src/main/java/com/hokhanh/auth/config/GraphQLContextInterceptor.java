@@ -1,5 +1,6 @@
 package com.hokhanh.auth.config;
 
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,14 +46,14 @@ public class GraphQLContextInterceptor implements WebGraphQlInterceptor {
 			if (Boolean.TRUE.equals(setCookie)) {
 				String refreshTokenFromContext = ctx.get(AuthenticationConstants.REFRESH_TOKEN_COOKIE_NAME);
 				CookieUtil.setHttpOnlyCookie(response, AuthenticationConstants.REFRESH_TOKEN_COOKIE_NAME,
-						refreshTokenFromContext, JwtPropertyConstants.REFRESH_TOKEN_EXPIRATION,
+						refreshTokenFromContext, Duration.ofMillis(JwtPropertyConstants.REFRESH_TOKEN_EXPIRATION),
 						AuthenticationConstants.REFRESH_TOKEN_COOKIE_PATH);
 			}
 
 			Boolean removeCookie = ctx.getOrDefault(AuthenticationConstants.REMOVE_COOKIE_CONTEXT_KEY, false);
 			if (Boolean.TRUE.equals(removeCookie)) {
-				CookieUtil.setHttpOnlyCookie(response, AuthenticationConstants.REFRESH_TOKEN_COOKIE_NAME, null, 0,
-						AuthenticationConstants.REFRESH_TOKEN_COOKIE_PATH);
+				CookieUtil.setHttpOnlyCookie(response, AuthenticationConstants.REFRESH_TOKEN_COOKIE_NAME, null,
+						Duration.ofMillis(0), AuthenticationConstants.REFRESH_TOKEN_COOKIE_PATH);
 			}
 
 		});

@@ -16,6 +16,7 @@ import org.springframework.web.server.WebFilter;
 import org.springframework.web.server.WebFilterChain;
 
 import com.hokhanh.client.AuthClient;
+import com.hokhanh.common.auth.RoleConstants;
 import com.hokhanh.common.httpHeader.HttpHeadersConstants;
 import com.hokhanh.jwt.JwtService;
 
@@ -23,9 +24,6 @@ import reactor.core.publisher.Mono;
 
 @Component
 public class JwtAuthorizationFilter implements WebFilter{
-	public static final String INTERVIEWER_ROLE = "INTERVIEWER";
-	public static final String CANDIDATE_ROLE = "CANDIDATE";
-
 	private static final List<String> INTERVIEWER_REQUIRED_OPERATIONS = List.of();
 	private static final List<String> CANDIDATE_REQUIRED_OPERATIONS = 
 		List.of
@@ -35,6 +33,7 @@ public class JwtAuthorizationFilter implements WebFilter{
 	@Autowired
 	private AuthClient authClient;
 
+	@Autowired
 	private JwtService jwtService;
 
 	@Override
@@ -111,13 +110,13 @@ public class JwtAuthorizationFilter implements WebFilter{
 		String operationName = request.getHeaders().getFirst(JwtAuthUtils.HEADER_OPERATION_NAME);
 		if(CANDIDATE_REQUIRED_OPERATIONS
 				.stream().anyMatch(x -> x.equalsIgnoreCase(operationName))
-				&& !CANDIDATE_ROLE.equalsIgnoreCase(roleName)) {
+				&& !RoleConstants.CANDIDATE_ROLE.equalsIgnoreCase(roleName)) {
 			return JwtAuthUtils.onError(exchange, "THIS REQUEST IS CANDIDATE ROLE", HttpStatus.FORBIDDEN);
 		}
 		
 		if(INTERVIEWER_REQUIRED_OPERATIONS
 				.stream().anyMatch(x -> x.equalsIgnoreCase(operationName))
-				&& !INTERVIEWER_ROLE.equalsIgnoreCase(roleName)) {
+				&& !RoleConstants.INTERVIEWER_ROLE.equalsIgnoreCase(roleName)) {
 			return JwtAuthUtils.onError(exchange, "THIS REQUEST IS INTERVIEWER ROLE", HttpStatus.FORBIDDEN);
 		}
 		

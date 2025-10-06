@@ -22,4 +22,12 @@ public class JwtTokenCacheService {
 	public void cacheRefreshToken(String refreshToken, Duration ttl) {
 		redisService.set(REFRESH_TOKEN_REDIS_KEY + refreshToken, refreshToken, ttl);
 	}
+	
+	public void deleteRefreshToken(String refreshToken) {
+		redisService.delete(REFRESH_TOKEN_REDIS_KEY + refreshToken);
+	}
+	
+	public void cacheAccessTokenToBlacklist(String accessToken, Duration ttl) {
+		redisService.set(ACCESS_TOKEN_BLACKLIST_REDIS_KEY + accessToken, accessToken, ttl);
+	}
 }

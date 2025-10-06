@@ -13,8 +13,8 @@ import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hokhanh.common.graphql.GraphQLRequest;
 import com.hokhanh.common.graphql.GraphQLResponse;
-import com.hokhanh.common.user.request.CreateUserInput;
-import com.hokhanh.common.user.response.CreateUserPayload;
+import com.hokhanh.common.user.request.CreateOrUpdateUserInput;
+import com.hokhanh.common.user.response.CreateOrUpdateUserPayload;
 import com.hokhanh.common.user.response.UserByEmailPayload;
 
 import lombok.RequiredArgsConstructor;
@@ -81,12 +81,12 @@ public class UserClient {
 		return mapper.convertValue(value, UserByEmailPayload.class);
 	}
 	
-	public CreateUserPayload createUserInternal(CreateUserInput input) {
+	public CreateOrUpdateUserPayload createOrUpdateUserInternal(CreateOrUpdateUserInput input) {
 		String url = userBaseUrl + graphqlPath;
 
 		String mutation = """
-		        mutation($input: CreateUserInput!) {
-		            createUserInternal(input: $input) {
+		        mutation($input: CreateOrUpdateUserInput!) {
+		            createOrUpdateUserInternal(input: $input) {
 		                baseUser {
 		                    id
 		                    email
@@ -101,7 +101,9 @@ public class UserClient {
 		        }
 		    """;
 
-		Map<String, Object> variables = Map.of("input", input);
+		Map<String, Object> variables = Map.of(
+			    "input", mapper.convertValue(input, Map.class)
+			);
 		
 		GraphQLRequest request = new GraphQLRequest(mutation, variables);
 
@@ -121,12 +123,12 @@ public class UserClient {
 			throw new RuntimeException("GraphQL Error: " + errorMsg);
 		}
 
-		Object value = response.getBody().data().get("createUserInternal");
+		Object value = response.getBody().data().get("createOrUpdateUserInternal");
 		if (value == null) {
-			throw new RuntimeException("No data returned for createUserInternal");
+			throw new RuntimeException("No data returned for createOrUpdateUserInternal");
 		}
 
-		return mapper.convertValue(value, CreateUserPayload.class);
+		return mapper.convertValue(value, CreateOrUpdateUserPayload.class);
 	}
 
 }

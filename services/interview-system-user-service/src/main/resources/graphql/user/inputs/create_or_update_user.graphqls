@@ -1,4 +1,4 @@
-input CreateUserInput{
+input CreateOrUpdateUserInput{
 	email: String!
 	phoneNumber: String!
 	gender: Boolean!

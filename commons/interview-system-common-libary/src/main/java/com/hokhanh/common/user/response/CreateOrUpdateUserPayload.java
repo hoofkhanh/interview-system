@@ -1,6 +1,6 @@
 package com.hokhanh.common.user.response;
 
-public record CreateUserPayload(
+public record CreateOrUpdateUserPayload(
 	BaseUserPayload baseUser
 ) {
 

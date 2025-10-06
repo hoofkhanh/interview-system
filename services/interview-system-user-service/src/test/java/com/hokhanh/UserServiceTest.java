@@ -14,9 +14,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.hokhanh.common.user.request.CreateUserInput;
+import com.hokhanh.common.user.request.CreateOrUpdateUserInput;
 import com.hokhanh.common.user.response.BaseUserPayload;
-import com.hokhanh.common.user.response.CreateUserPayload;
+import com.hokhanh.common.user.response.CreateOrUpdateUserPayload;
 import com.hokhanh.common.user.response.UserByEmailPayload;
 import com.hokhanh.user.mapper.UserMapper;
 import com.hokhanh.user.model.User;
@@ -34,23 +34,23 @@ public class UserServiceTest {
     @Mock
     private UserMapper mapper;
 
-    private CreateUserInput input;
+    private CreateOrUpdateUserInput input;
     private User userWithoutId;
     private User userWithId;
     private BaseUserPayload baseUserPayload;
-    private CreateUserPayload createUserPayload;
+    private CreateOrUpdateUserPayload createOrUpdateUserPayload;
     private UserByEmailPayload userByEmailPayload;
 
     @BeforeEach
     void setUp() {
         setUpBase();
-        setUpCreateUser();
+        setUpCreateOrUpdateUser();
         setUpUserByEmail();
     }
 
  // This is the base setup for the other setups below
     private void setUpBase() {
-        input = new CreateUserInput(
+        input = new CreateOrUpdateUserInput(
             "khanh@gmail.com",
             "123",
             true,
@@ -94,17 +94,17 @@ public class UserServiceTest {
         );
     }
 
-    private void setUpCreateUser() {
-        createUserPayload = new CreateUserPayload(baseUserPayload);
+    private void setUpCreateOrUpdateUser() {
+    	createOrUpdateUserPayload = new CreateOrUpdateUserPayload(baseUserPayload);
     }
 
     private void setUpUserByEmail() {
         userByEmailPayload = new UserByEmailPayload(baseUserPayload);
     }
     
-    // This test case is intended for the createUser method in the service class
+    // This test case is intended for the CreateOrUpdateUser method in the service class
     @Test
-    void createUser_shouldReturnPayload() {
+    void createOrUpdateUser_shouldReturnPayload() {
         // Mock mapper và repository
         when(mapper.toUser(input)).thenReturn(userWithoutId);
         when(repository.save(userWithoutId)).thenReturn(userWithId);
@@ -112,10 +112,10 @@ public class UserServiceTest {
         
         
         // Gọi service
-        CreateUserPayload result = userService.createUser(input);
+        CreateOrUpdateUserPayload result = userService.createOrUpdateUser(input);
 
         // Assert
-        assertEquals(createUserPayload, result);
+        assertEquals(createOrUpdateUserPayload, result);
 
         // Verify repository và mapper được gọi đúng
         verify(mapper).toUser(input);

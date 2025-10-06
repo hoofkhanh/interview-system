@@ -9,12 +9,12 @@ import jakarta.ws.rs.core.HttpHeaders;
 
 public class CookieUtil {
 	
-	public static void setHttpOnlyCookie(WebGraphQlResponse response, String name, String value, long minutes, String path) {
+	public static void setHttpOnlyCookie(WebGraphQlResponse response, String name, String value, Duration ttl, String path) {
         ResponseCookie cookie = ResponseCookie.from(name, value)
             .httpOnly(true)
             .secure(true)         
             .path(path)
-            .maxAge(Duration.ofMinutes(minutes))
+            .maxAge(ttl)
             .sameSite("None")   
             .build();
 

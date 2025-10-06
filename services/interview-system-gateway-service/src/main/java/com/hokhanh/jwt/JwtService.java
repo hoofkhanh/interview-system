@@ -8,9 +8,11 @@ import java.security.Key;
 import java.util.Date;
 import java.util.function.Function;
 
+import org.springframework.stereotype.Service;
+
 import com.hokhanh.common.jwt.JwtPropertyConstants;
 
-
+@Service
 public class JwtService {
 	
 	public boolean isTokenValid(String token) {

@@ -1,0 +1,14 @@
+enum SigninApiStatusType{
+	USERNAME_NOT_FOUND
+	PASSWORD_INVALID
+}
+
+type SigninPayload{
+	accessToken: String!
+}
+
+type SigninApiPayload{
+	metadata: BaseApiPayload!
+	status: SigninApiStatusType
+	payload: SigninPayload
+}

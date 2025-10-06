@@ -40,11 +40,12 @@ public class GraphQLOperationFilter implements WebFilter{
 	private final ObjectMapper objectMapper = new ObjectMapper();
 
 	private static final List<String> PUBLIC_OPERATIONS = List.of(
-			"signupInterviewer", "verifyInterviewerSignupOtp"
+			"signupInterviewer", "verifyInterviewerSignupOtp", "signupCandidate",
+			"signin"
 	);
 	
 	private static final List<String> INTERNAL_OPERATIONS = List.of(
-			"isTokenBlockedInternal", "createUserInternal", "userByEmailInternal"
+			"isTokenBlockedInternal", "createOrUpdateUserInternal", "userByEmailInternal"
 		);
 	
 	@Value("${spring.graphql.http.path}")
