@@ -3,6 +3,7 @@ package com.hokhanh.auth.service;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.UUID;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,8 @@ import com.hokhanh.auth.request.signup.SignupInterviewerInput;
 import com.hokhanh.auth.request.signup.VerifyInterviewerSignupOtpInput;
 import com.hokhanh.auth.response.common.BaseApiPayload;
 import com.hokhanh.auth.response.logout.LogoutApiPayload;
+import com.hokhanh.auth.response.refreshToken.RefreshTokenApiPayload;
+import com.hokhanh.auth.response.refreshToken.RefreshTokenApiStatusType;
 import com.hokhanh.auth.response.signin.SigninApiPayload;
 import com.hokhanh.auth.response.signin.SigninApiStatusType;
 import com.hokhanh.auth.response.signup.SignupApiStatusType;
@@ -240,10 +243,7 @@ public class AuthService {
 	public LogoutApiPayload logout(String accessToken, String refreshToken, GraphQLContext context) {
 		jwtTokenCacheService.deleteRefreshToken(refreshToken);
 		
-		Date expiration = jwtService.extractExpiration(accessToken);
-		long currentMillis = System.currentTimeMillis();
-		long expirationMillis = expiration.getTime();
-		long seconds = (expirationMillis - currentMillis) / 1000;
+		Long seconds = getRemainingSeconds(accessToken);
 		if (seconds > 0) {
 			jwtTokenCacheService.cacheAccessTokenToBlacklist(accessToken, Duration.ofSeconds(seconds));
 		}
@@ -252,6 +252,51 @@ public class AuthService {
 		
 		return new LogoutApiPayload(new BaseApiPayload(true, "Logout successfully"));
 	}
-
 	
+	public RefreshTokenApiPayload refreshToken(String refreshToken, GraphQLContext context) {
+		String rtFromRedis = jwtTokenCacheService.getCachedRefreshToken(refreshToken);
+		if(rtFromRedis == null || !jwtService.isRefreshTokenType(rtFromRedis)) {
+			return new RefreshTokenApiPayload(
+				new BaseApiPayload(false, "Refresh token invalid (1)"),
+				RefreshTokenApiStatusType.REFRESH_TOKEN_INVALID,
+				null
+			);
+		}
+		
+		Long seconds = getRemainingSeconds(rtFromRedis);
+		if (seconds <= 0) {
+			return new RefreshTokenApiPayload(
+				new BaseApiPayload(false, "Refresh token invalid (2)"),
+				RefreshTokenApiStatusType.REFRESH_TOKEN_INVALID,
+				null
+			);
+		}
+		
+		String authIdStr = jwtService.extractSubject(rtFromRedis);
+		UUID authId = authIdStr != null ? UUID.fromString(authIdStr) : UUID.fromString("");
+		Auth auth = authRepo.findById(authId).orElse(null);
+		if(auth == null) {
+			return new RefreshTokenApiPayload(
+				new BaseApiPayload(false, "Refresh token invalid (3)"),
+				RefreshTokenApiStatusType.REFRESH_TOKEN_INVALID,
+				null
+			);
+		}
+		
+		String accessToken = jwtService.generateAccessToken(auth.getId(), auth.getUserId(), auth.getRole().getName());
+		
+		return new RefreshTokenApiPayload(
+			new BaseApiPayload(true, "Refresh token successfully"),
+			null,
+			authMapper.toRefreshTokenPayload(accessToken)
+		);
+	}
+	
+	private Long getRemainingSeconds(String token) {
+		Date expiration = jwtService.extractExpiration(token);
+		long currentMillis = System.currentTimeMillis();
+		long expirationMillis = expiration.getTime();
+		return (expirationMillis - currentMillis) / 1000;
+	}
+
 }

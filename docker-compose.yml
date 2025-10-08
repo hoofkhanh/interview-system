@@ -27,7 +27,7 @@ services:
     volumes:
       - pgadmin:/var/lib/pgadmin
     ports:
-      - 80:80
+      - 85:80
     networks:
       - interview-system-net
     restart: unless-stopped
@@ -132,7 +132,7 @@ services:
 #    restart: unless-stopped
 #    networks:
 #      - interview-system-net
-#    
+#   
 #  user-service:
 #    image: hoofkhanh/interview-system-user-service:1.0.0
 #    container_name: interview-system-user-service
@@ -173,9 +173,11 @@ services:
 #      MAIL_USERNAME: ${MAIL_USERNAME}
 #      MAIL_PASSWORD: ${MAIL_PASSWORD}
 #    depends_on:
-#      -  config-server
-#      -  discovery-server
-#      -  postgres
+#      - config-server
+#      - discovery-server
+#      - postgres
+#      - redis
+#      - mail-dev
 #    restart: unless-stopped
 #    networks:
 #      - interview-system-net

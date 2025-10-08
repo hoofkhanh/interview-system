@@ -10,6 +10,7 @@ import com.hokhanh.auth.model.Role;
 import com.hokhanh.auth.request.signup.SignupInterviewerInput;
 import com.hokhanh.auth.response.common.BaseAuthPayload;
 import com.hokhanh.auth.response.common.RolePayload;
+import com.hokhanh.auth.response.refreshToken.RefreshTokenPayload;
 import com.hokhanh.auth.response.signin.SigninPayload;
 import com.hokhanh.auth.response.signup.SignupCandidatePayload;
 import com.hokhanh.auth.response.signup.SignupInterviewerPayload;
@@ -60,5 +61,9 @@ public class AuthMapper {
 
 	public SigninPayload toSigninPayload(String accessToken) {
 		return new SigninPayload(accessToken);
+	}
+
+	public RefreshTokenPayload toRefreshTokenPayload(String accessToken) {
+		return new RefreshTokenPayload(accessToken);
 	}
 }

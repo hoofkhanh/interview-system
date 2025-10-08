@@ -41,7 +41,8 @@ public class GraphQLOperationFilter implements WebFilter{
 
 	private static final List<String> PUBLIC_OPERATIONS = List.of(
 			"signupInterviewer", "verifyInterviewerSignupOtp", "signupCandidate",
-			"signin"
+			"signin",
+			"refreshToken"
 	);
 	
 	private static final List<String> INTERNAL_OPERATIONS = List.of(

@@ -30,4 +30,8 @@ public class JwtTokenCacheService {
 	public void cacheAccessTokenToBlacklist(String accessToken, Duration ttl) {
 		redisService.set(ACCESS_TOKEN_BLACKLIST_REDIS_KEY + accessToken, accessToken, ttl);
 	}
+	
+	public String getCachedRefreshToken(String rtFromCookie) {
+		return redisService.get(REFRESH_TOKEN_REDIS_KEY + rtFromCookie, String.class);
+	}
 }

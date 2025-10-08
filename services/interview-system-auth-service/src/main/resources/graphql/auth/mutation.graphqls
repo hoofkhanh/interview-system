@@ -4,4 +4,5 @@ type Mutation {
 	signupCandidate(input: SignupCandidateInput!): SignupCandidateApiPayload!
 	signin(input: SigninInput!): SigninApiPayload!
 	logout: LogoutApiPayload!
+	refreshToken: RefreshTokenApiPayload!
 }

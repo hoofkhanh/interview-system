@@ -1,0 +1,13 @@
+enum RefreshTokenApiStatusType{
+	REFRESH_TOKEN_INVALID
+}
+
+type RefreshTokenPayload{
+	accessToken: String!
+}
+
+type RefreshTokenApiPayload{
+	metadata: BaseApiPayload!
+	status: RefreshTokenApiStatusType
+	payload: RefreshTokenPayload
+}

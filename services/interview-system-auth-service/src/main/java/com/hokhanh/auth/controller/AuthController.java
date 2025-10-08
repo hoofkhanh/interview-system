@@ -13,6 +13,7 @@ import com.hokhanh.auth.request.signup.SignupInterviewerInput;
 import com.hokhanh.auth.request.signup.VerifyInterviewerSignupOtpInput;
 import com.hokhanh.auth.response.common.BaseApiPayload;
 import com.hokhanh.auth.response.logout.LogoutApiPayload;
+import com.hokhanh.auth.response.refreshToken.RefreshTokenApiPayload;
 import com.hokhanh.auth.response.signin.SigninApiPayload;
 import com.hokhanh.auth.response.signup.SignupCandidateApiPayload;
 import com.hokhanh.auth.response.signup.SignupInterviewerApiPayload;
@@ -54,8 +55,8 @@ public class AuthController {
 	}
 	
 	@MutationMapping
-	public LogoutApiPayload logout(@ContextValue(name = AuthenticationConstants.REFRESH_TOKEN_COOKIE_NAME) String refreshToken,
-			@ContextValue(name = AuthenticationConstants.AUTHORIZATION_CONTEXT_KEY) String authorization,
+	public LogoutApiPayload logout(@ContextValue(name = AuthenticationConstants.REFRESH_TOKEN_COOKIE_NAME, required = false) String refreshToken,
+			@ContextValue(name = AuthenticationConstants.AUTHORIZATION_CONTEXT_KEY, required = false) String authorization,
 			GraphQLContext context) {
 		if(refreshToken == null || refreshToken.isBlank() || authorization == null || authorization.isBlank()) {
 			return new LogoutApiPayload(new BaseApiPayload(false, "Missing refreshToken or authorization"));
@@ -64,5 +65,11 @@ public class AuthController {
 		String accessToken = authorization.replace("Bearer ", "").trim();
 		
 		return authService.logout(accessToken, refreshToken, context);
+	}
+	
+	@MutationMapping
+	public RefreshTokenApiPayload refreshToken(@ContextValue(name = AuthenticationConstants.REFRESH_TOKEN_COOKIE_NAME, required = false) String refreshToken,
+			GraphQLContext context) {
+		return authService.refreshToken(refreshToken, context);
 	}
 }
