@@ -3,7 +3,7 @@ package com.hokhanh.common.utils;
 import io.github.cdimascio.dotenv.Dotenv;
 
 public final class EnvLoaderUtil {
-	private static final Dotenv DOT_ENV = Dotenv.configure().directory("../../").load();
+	private static final Dotenv DOT_ENV = Dotenv.configure().directory("../../").ignoreIfMissing().load();
 
 //	private static String get(String key) {
 //		return DOT_ENV.get(key);
