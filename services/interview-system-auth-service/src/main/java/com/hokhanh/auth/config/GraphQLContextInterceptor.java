@@ -45,6 +45,7 @@ public class GraphQLContextInterceptor implements WebGraphQlInterceptor {
 
 			if (Boolean.TRUE.equals(setCookie)) {
 				String refreshTokenFromContext = ctx.get(AuthenticationConstants.REFRESH_TOKEN_COOKIE_NAME);
+				System.out.println("refrehsToken: " + refreshTokenFromContext);
 				CookieUtil.setHttpOnlyCookie(response, AuthenticationConstants.REFRESH_TOKEN_COOKIE_NAME,
 						refreshTokenFromContext, Duration.ofMillis(JwtPropertyConstants.REFRESH_TOKEN_EXPIRATION),
 						AuthenticationConstants.REFRESH_TOKEN_COOKIE_PATH);

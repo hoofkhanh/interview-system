@@ -1,0 +1,4 @@
+input BaseQuestionInput{
+	title: String!
+	description: String!
+}

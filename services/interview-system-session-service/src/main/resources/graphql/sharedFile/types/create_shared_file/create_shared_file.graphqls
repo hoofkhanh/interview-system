@@ -1,0 +1,9 @@
+type CreateSharedFilePayload{
+	baseFile: BaseFilePayload!
+}
+
+type CreateSharedFileApiPayload{
+	metadata: BaseApiPayload!
+	status: CacheApiStatusType
+	payload: CreateSharedFilePayload
+}

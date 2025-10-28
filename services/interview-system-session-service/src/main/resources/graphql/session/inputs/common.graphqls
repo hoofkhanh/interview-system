@@ -1,0 +1,7 @@
+input BaseSessionInput{
+	questionId: ID!
+	startTime: String!
+	status: SessionStatusType!
+	title: String!
+	githubLink: String
+}

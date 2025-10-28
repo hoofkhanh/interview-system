@@ -1,0 +1,9 @@
+type DeleteQuestionPayload{
+	id: ID!
+}
+
+type DeleteQuestionApiPayload{
+	metadata: BaseApiPayload!
+	status: QuestionApiStatusType
+	payload: DeleteQuestionPayload
+}

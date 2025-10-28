@@ -1,0 +1,5 @@
+extend type Mutation{
+	createSharedFile(input: CreateSharedFileInput!): CreateSharedFileApiPayload!
+	updateSharedFile(input: UpdateSharedFileInput!): UpdateSharedFileApiPayload!
+	deleteSharedFile(input: DeleteSharedFileInput!): DeleteSharedFileApiPayload!
+}

@@ -1,5 +1,8 @@
 package com.hokhanh.user.service;
 
+import java.util.List;
+import java.util.UUID;
+
 import org.springframework.stereotype.Service;
 
 import com.hokhanh.common.user.request.CreateOrUpdateUserInput;
@@ -32,6 +35,17 @@ public class UserService {
 	public UserByEmailPayload userByEmail(String email) {
 		User user = repository.findByEmail(email);
 		return new UserByEmailPayload(mapper.toBaseUserPayload(user));
+	}
+
+	public List<UserByEmailPayload> usersById(List<String> ids) {
+		if (ids == null || ids.isEmpty()) {
+		    return List.of();
+		}
+
+		List<UUID> uuidIds = ids.stream().map(i -> UUID.fromString(i)).toList();
+		List<User> users = repository.findAllById(uuidIds);
+		List<UserByEmailPayload> usersMapped = users.stream().map(u -> new UserByEmailPayload(mapper.toBaseUserPayload(u))).toList();
+		return usersMapped;
 	}
 
 }

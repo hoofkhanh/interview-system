@@ -1,0 +1,10 @@
+type QuestionPayload{
+	baseQuestion: BaseQuestionPayload!
+	testCases: [BaseTestCasePayload!] !
+}
+
+type QuestionApiPayload{
+	metadata: BaseApiPayload!
+	status: QuestionApiStatusType
+	payload: QuestionPayload
+}

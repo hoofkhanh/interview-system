@@ -25,6 +25,8 @@
 		<module>services/interview-system-user-service</module>
 		<module>services/interview-system-auth-service</module>
 		<module>services/interview-system-gateway-service</module>
+		<module>services/interview-system-question-service</module>
+		<module>services/interview-system-session-service</module>
 		<module>commons/interview-system-common-libary</module>
 	</modules>
 

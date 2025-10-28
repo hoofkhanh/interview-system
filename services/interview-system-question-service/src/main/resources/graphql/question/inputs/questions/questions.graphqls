@@ -1,0 +1,9 @@
+input BasePageInput{
+	page: Int!
+	size: Int!
+}
+
+input QuestionsInput{
+	basePage: BasePageInput!
+	keyword: String
+}

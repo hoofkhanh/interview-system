@@ -1,6 +1,7 @@
 type SignupCandidatePayload{
 	baseAuth: BaseAuthPayload!
 	accessToken: String!
+	refreshToken: String!
 }
 
 type SignupCandidateApiPayload{

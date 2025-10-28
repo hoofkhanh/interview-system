@@ -1,0 +1,6 @@
+type Mutation{
+	createSession(input: CreateSessionInput!): CreateSessionApiPayload!
+	updateSession(input: UpdateSessionInput!): UpdateSessionApiPayload!
+	deleteSession(input:DeleteSessionInput!): DeleteSessionApiPayload!
+	joinSession(input:JoinSessionInput!): JoinSessionApiPayload! 
+}

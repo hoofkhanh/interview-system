@@ -114,7 +114,7 @@ services:
     restart: unless-stopped
     networks:
       - interview-system-net
-
+      
 # services
   config-server:
     image: hoofkhanh/interview-system-config-server:1.0.0
@@ -201,6 +201,52 @@ services:
     depends_on:
       -  config-server
       -  discovery-server
+    restart: unless-stopped
+    networks:
+      - interview-system-net
+      
+  question-service:
+    image: hoofkhanh/interview-system-question-service:1.0.0
+    container_name: interview-system-question-service
+    ports: 
+      - 9005:9005
+    environment:
+      <<: *common-env
+      HOST_NAME: question-service
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: question
+      DB_USERNAME: ${POSTGRES_USER}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+    depends_on:
+      - config-server
+      - discovery-server
+      - postgres
+    restart: unless-stopped
+    networks:
+      - interview-system-net
+      
+  session-service:
+    image: hoofkhanh/interview-system-session-service:1.0.0
+    container_name: interview-system-session-service
+    ports: 
+      - 9006:9006
+    environment:
+      <<: *common-env
+      HOST_NAME: session-service
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: session
+      DB_USERNAME: ${POSTGRES_USER}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_DB: 1
+    depends_on:
+      - config-server
+      - discovery-server
+      - postgres
+      - redis
     restart: unless-stopped
     networks:
       - interview-system-net

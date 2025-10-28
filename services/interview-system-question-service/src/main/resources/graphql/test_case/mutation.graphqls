@@ -1,0 +1,5 @@
+extend type Mutation{
+	createTestCase(input: CreateTestCaseInput!): CreateTestCaseApiPayload!
+	updateTestCase(input: UpdateTestCaseInput!): UpdateTestCaseApiPayload!
+	deleteTestCase(input: DeleteTestCaseInput!): DeleteTestCaseApiPayload!
+}

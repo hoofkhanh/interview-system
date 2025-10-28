@@ -2,6 +2,7 @@ package com.hokhanh.common.graphql;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.graphql.server.WebGraphQlInterceptor;
 import org.springframework.graphql.server.WebGraphQlRequest;
@@ -22,8 +23,8 @@ public class GraphQLHeaderContextInterceptor implements WebGraphQlInterceptor {
 		request.configureExecutionInput((executionInput, builder) -> {
 			Map<String, Object> contextMap = new HashMap<>();
 			if (userId != null && roleName != null && authId != null) {
-				contextMap.put(HttpHeadersConstants.HEADER_AUTH_ID, authId);
-				contextMap.put(HttpHeadersConstants.HEADER_USER_ID, userId);
+				contextMap.put(HttpHeadersConstants.HEADER_AUTH_ID, UUID.fromString(authId));
+				contextMap.put(HttpHeadersConstants.HEADER_USER_ID, UUID.fromString(userId));
 				contextMap.put(HttpHeadersConstants.HEADER_ROLE_NAME, roleName);
 			}
 			return builder.graphQLContext(contextMap).build();

@@ -1,0 +1,9 @@
+type CreateSessionPayload{
+	baseSessionPayload: BaseSessionPayload!
+}
+
+type CreateSessionApiPayload{
+	metadata: BaseApiPayload!
+	status: SessionApiStatusType
+	payload: CreateSessionPayload
+}

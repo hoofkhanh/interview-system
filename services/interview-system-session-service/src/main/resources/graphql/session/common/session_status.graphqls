@@ -1,0 +1,5 @@
+enum SessionStatusType{
+	PENDING
+	STARTING
+	ENDED
+}

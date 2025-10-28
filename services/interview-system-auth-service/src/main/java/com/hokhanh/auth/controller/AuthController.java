@@ -1,5 +1,7 @@
 package com.hokhanh.auth.controller;
 
+import java.util.List;
+
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.ContextValue;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
@@ -12,6 +14,7 @@ import com.hokhanh.auth.request.signup.SignupCandidateInput;
 import com.hokhanh.auth.request.signup.SignupInterviewerInput;
 import com.hokhanh.auth.request.signup.VerifyInterviewerSignupOtpInput;
 import com.hokhanh.auth.response.common.BaseApiPayload;
+import com.hokhanh.auth.response.common.BaseAuthPayload;
 import com.hokhanh.auth.response.logout.LogoutApiPayload;
 import com.hokhanh.auth.response.refreshToken.RefreshTokenApiPayload;
 import com.hokhanh.auth.response.signin.SigninApiPayload;
@@ -22,6 +25,7 @@ import com.hokhanh.auth.service.AuthService;
 
 import graphql.GraphQLContext;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 
 @Controller
@@ -55,9 +59,11 @@ public class AuthController {
 	}
 	
 	@MutationMapping
-	public LogoutApiPayload logout(@ContextValue(name = AuthenticationConstants.REFRESH_TOKEN_COOKIE_NAME, required = false) String refreshToken,
+	public LogoutApiPayload logout(@Argument String refreshToken,
 			@ContextValue(name = AuthenticationConstants.AUTHORIZATION_CONTEXT_KEY, required = false) String authorization,
 			GraphQLContext context) {
+		System.out.println("authorization: "+ authorization);
+		System.out.println("rf: "+ refreshToken);
 		if(refreshToken == null || refreshToken.isBlank() || authorization == null || authorization.isBlank()) {
 			return new LogoutApiPayload(new BaseApiPayload(false, "Missing refreshToken or authorization"));
 		}
@@ -68,8 +74,14 @@ public class AuthController {
 	}
 	
 	@MutationMapping
-	public RefreshTokenApiPayload refreshToken(@ContextValue(name = AuthenticationConstants.REFRESH_TOKEN_COOKIE_NAME, required = false) String refreshToken,
+	public RefreshTokenApiPayload refreshToken(@Argument String refreshToken,
 			GraphQLContext context) {
+		System.out.println("rf: "+ refreshToken);
 		return authService.refreshToken(refreshToken, context);
+	}
+	
+	@QueryMapping
+	public List<BaseAuthPayload> authsByUserId(@Argument @NotNull List<String> userIds) {
+		return authService.authsByUserId(userIds);
 	}
 }

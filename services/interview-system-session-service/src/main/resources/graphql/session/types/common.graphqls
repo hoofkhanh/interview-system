@@ -1,0 +1,25 @@
+type BaseApiPayload{
+	success: Boolean!
+	message: String!
+}
+
+type BaseSessionPayload{
+	id: ID!
+	creatorId: ID!
+	questionId: ID!
+	link: String!
+	startTime: String!
+	status: SessionStatusType!
+	title: String!
+	githubLink: String
+}
+
+enum SessionApiStatusType{
+	YOU_NOT_OWNER
+	SESSION_NOT_FOUND
+	QUESTION_NOT_FOUND
+	TITLE_DUPLICATED
+	SESSION_ENDED
+	SESSION_PENDING
+	SESSION_STARTING
+}

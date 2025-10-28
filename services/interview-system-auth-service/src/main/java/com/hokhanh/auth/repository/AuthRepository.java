@@ -1,5 +1,6 @@
 package com.hokhanh.auth.repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -19,4 +20,6 @@ public interface AuthRepository extends JpaRepository<Auth, UUID>{
 	boolean existsByUsername(String username);
 	
 	Auth findByUsername(String username);
+	
+	List<Auth> findAllByUserIdIn(List<UUID> ids);
 }

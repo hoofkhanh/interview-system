@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:question}
+    username: ${DB_USERNAME:hoofkhanh}
+    password: ${DB_PASSWORD:hoofkhanh}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
+      
+server:
+  port: 9005

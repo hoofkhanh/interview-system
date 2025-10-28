@@ -1,0 +1,9 @@
+type DeleteSharedFilePayload{
+	id: ID!
+}
+
+type DeleteSharedFileApiPayload{
+	metadata: BaseApiPayload!
+	status: CacheApiStatusType
+	payload: DeleteSharedFilePayload
+}

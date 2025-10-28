@@ -6,6 +6,7 @@ enum VerifyOtpApiStatusType{
 type VerifyInterviewerSignupOtpPayload{
 	baseAuth: BaseAuthPayload!
 	accessToken: String!
+	refreshToken: String!
 }
 
 type VerifyInterviewerSignupOtpApiPayload{

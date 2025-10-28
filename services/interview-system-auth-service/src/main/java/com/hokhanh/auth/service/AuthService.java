@@ -3,6 +3,7 @@ package com.hokhanh.auth.service;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,6 +27,8 @@ import com.hokhanh.auth.request.signup.SignupCandidateInput;
 import com.hokhanh.auth.request.signup.SignupInterviewerInput;
 import com.hokhanh.auth.request.signup.VerifyInterviewerSignupOtpInput;
 import com.hokhanh.auth.response.common.BaseApiPayload;
+import com.hokhanh.auth.response.common.BaseAuthPayload;
+import com.hokhanh.auth.response.common.RolePayload;
 import com.hokhanh.auth.response.logout.LogoutApiPayload;
 import com.hokhanh.auth.response.refreshToken.RefreshTokenApiPayload;
 import com.hokhanh.auth.response.refreshToken.RefreshTokenApiStatusType;
@@ -142,12 +145,13 @@ public class AuthService {
 		auth.setPassword(passwordEncoder.encode(auth.getPassword()));
 		auth = authRepo.save(auth);
 		
-		String accessToken = generateAccessAndRefreshTokenAndSetCookie(auth, context);
+		String refreshToken = jwtService.generateRefreshToken(auth.getId());
+		String accessToken = generateAccessAndRefreshTokenAndSetCookie(auth, context, refreshToken);
 		
 		return new VerifyInterviewerSignupOtpApiPayload(
 			new BaseApiPayload(true, "Verify otp successfully"),
 			null,
-			authMapper.toVerifyInterviewerSignupOtpPayload(auth, accessToken, payload)
+			authMapper.toVerifyInterviewerSignupOtpPayload(auth, accessToken, refreshToken, payload)
 		);
 	}
 
@@ -164,13 +168,13 @@ public class AuthService {
 					userClientMapper.toCreateOrUpdateUserInput(input.baseSignup()));
 			
 			Auth auth = authRepo.findByUserId(user.baseUser().id());
-			
-			String accessToken = generateAccessAndRefreshTokenAndSetCookie(auth, context);
+			String refreshToken = jwtService.generateRefreshToken(auth.getId());
+			String accessToken = generateAccessAndRefreshTokenAndSetCookie(auth, context, refreshToken);
 			
 			return new SignupCandidateApiPayload(
 				new BaseApiPayload(true, "Update (Signup successfully)"),
 				null,
-				authMapper.toSignupCandidatePayload(auth, accessToken, payload)
+				authMapper.toSignupCandidatePayload(auth, accessToken, refreshToken, payload)
 			);
 		}else if(user.baseUser() != null && !roleName.equals(RoleConstants.CANDIDATE_ROLE)) {
 			return new SignupCandidateApiPayload(
@@ -194,12 +198,14 @@ public class AuthService {
 		
 		Auth auth = authRepo.save(authMapper.toAuth(role, payload.baseUser().id(), null));
 		
-		String accessToken = generateAccessAndRefreshTokenAndSetCookie(auth, context);
+		String refreshToken = jwtService.generateRefreshToken(auth.getId());
+		
+		String accessToken = generateAccessAndRefreshTokenAndSetCookie(auth, context, refreshToken);
 		
 		return new SignupCandidateApiPayload(
 			new BaseApiPayload(true, "Signup successfully"),
 			null,
-			authMapper.toSignupCandidatePayload(auth, accessToken, payload)
+			authMapper.toSignupCandidatePayload(auth, accessToken, refreshToken, payload)
 		);
 	}
 	
@@ -219,18 +225,18 @@ public class AuthService {
 			);
 		}
 		
-		String accessToken = generateAccessAndRefreshTokenAndSetCookie(auth, context);
+		String refreshToken = jwtService.generateRefreshToken(auth.getId());
+		String accessToken = generateAccessAndRefreshTokenAndSetCookie(auth, context, refreshToken);
 		
 		return new SigninApiPayload(
 			new BaseApiPayload(true, "Signin successfully"),
 			null,
-			authMapper.toSigninPayload(accessToken)
+			authMapper.toSigninPayload(accessToken, refreshToken)
 		);
 	}
 	
-	private String generateAccessAndRefreshTokenAndSetCookie(Auth auth, GraphQLContext context) {
+	private String generateAccessAndRefreshTokenAndSetCookie(Auth auth, GraphQLContext context, String refreshToken) {
 		String accessToken = jwtService.generateAccessToken(auth.getId(), auth.getUserId(), auth.getRole().getName());
-		String refreshToken = jwtService.generateRefreshToken(auth.getId());
 		
 		jwtTokenCacheService.cacheRefreshToken(refreshToken, Duration.ofMillis(JwtPropertyConstants.REFRESH_TOKEN_EXPIRATION));
 		
@@ -256,6 +262,7 @@ public class AuthService {
 	public RefreshTokenApiPayload refreshToken(String refreshToken, GraphQLContext context) {
 		String rtFromRedis = jwtTokenCacheService.getCachedRefreshToken(refreshToken);
 		if(rtFromRedis == null || !jwtService.isRefreshTokenType(rtFromRedis)) {
+			System.out.println("1");
 			return new RefreshTokenApiPayload(
 				new BaseApiPayload(false, "Refresh token invalid (1)"),
 				RefreshTokenApiStatusType.REFRESH_TOKEN_INVALID,
@@ -265,6 +272,7 @@ public class AuthService {
 		
 		Long seconds = getRemainingSeconds(rtFromRedis);
 		if (seconds <= 0) {
+			System.out.println("2");
 			return new RefreshTokenApiPayload(
 				new BaseApiPayload(false, "Refresh token invalid (2)"),
 				RefreshTokenApiStatusType.REFRESH_TOKEN_INVALID,
@@ -276,12 +284,15 @@ public class AuthService {
 		UUID authId = authIdStr != null ? UUID.fromString(authIdStr) : UUID.fromString("");
 		Auth auth = authRepo.findById(authId).orElse(null);
 		if(auth == null) {
+			System.out.println("3");
 			return new RefreshTokenApiPayload(
 				new BaseApiPayload(false, "Refresh token invalid (3)"),
 				RefreshTokenApiStatusType.REFRESH_TOKEN_INVALID,
 				null
 			);
 		}
+		
+		System.out.println("4");
 		
 		String accessToken = jwtService.generateAccessToken(auth.getId(), auth.getUserId(), auth.getRole().getName());
 		
@@ -297,6 +308,24 @@ public class AuthService {
 		long currentMillis = System.currentTimeMillis();
 		long expirationMillis = expiration.getTime();
 		return (expirationMillis - currentMillis) / 1000;
+	}
+
+	public List<BaseAuthPayload> authsByUserId(List<String> userIds) {
+		if (userIds == null || userIds.isEmpty()) {
+		    return List.of();
+		}
+
+		List<UUID> uuidIds = userIds.stream().map(i -> UUID.fromString(i)).toList();
+		List<Auth> auths = authRepo.findAllByUserIdIn(uuidIds);
+		List<BaseAuthPayload> authsMapped = auths.stream()
+				.map(a -> new BaseAuthPayload(
+					a.getId(),
+					new RolePayload(a.getRole().getId(), a.getRole().getName()),
+					a.getUserId(),
+					null,
+					null
+				)).toList();
+		return authsMapped;
 	}
 
 }

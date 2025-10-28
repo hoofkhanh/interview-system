@@ -1,0 +1,9 @@
+type DeleteSessionPayload{
+	id: ID!
+}
+
+type DeleteSessionApiPayload{
+	metadata: BaseApiPayload!
+	status: SessionApiStatusType
+	payload: DeleteSessionPayload
+}

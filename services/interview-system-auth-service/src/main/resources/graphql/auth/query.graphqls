@@ -1,3 +1,4 @@
 type Query{
 	isTokenBlockedInternal(accessToken: String!): Boolean!
+	authsByUserId(userIds: [ID!]!): [BaseAuthPayload!]!
 }

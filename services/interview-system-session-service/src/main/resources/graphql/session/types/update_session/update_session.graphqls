@@ -1,0 +1,9 @@
+type UpdateSessionPayload{
+	baseSessionPayload: BaseSessionPayload!
+}
+
+type UpdateSessionApiPayload{
+	metadata: BaseApiPayload!
+	status: SessionApiStatusType
+	payload: UpdateSessionPayload
+}

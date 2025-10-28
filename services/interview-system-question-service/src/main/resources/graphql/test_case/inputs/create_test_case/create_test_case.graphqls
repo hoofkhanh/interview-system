@@ -1,0 +1,4 @@
+input CreateTestCaseInput{
+	questionId: ID!
+	baseTestCase: BaseTestCaseInput!
+}

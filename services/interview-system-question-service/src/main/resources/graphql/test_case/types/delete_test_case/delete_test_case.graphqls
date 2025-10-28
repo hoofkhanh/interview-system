@@ -1,0 +1,9 @@
+type DeleteTestCasePayload{
+	id: ID!
+}
+
+type DeleteTestCaseApiPayload{
+	metadata: BaseApiPayload!
+	status: TestCaseApiStatusType
+	payload: DeleteTestCasePayload
+}

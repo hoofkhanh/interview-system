@@ -1,0 +1,9 @@
+type UpdateTestCasePayload{
+	baseTestCase: BaseTestCasePayload!
+}
+
+type UpdateTestCaseApiPayload{
+	metadata: BaseApiPayload!
+	status: TestCaseApiStatusType
+	payload: UpdateTestCasePayload
+}

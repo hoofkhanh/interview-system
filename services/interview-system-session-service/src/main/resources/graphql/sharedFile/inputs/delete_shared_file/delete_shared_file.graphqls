@@ -1,0 +1,4 @@
+input DeleteSharedFileInput{
+	sessionId: ID!
+	id: ID!
+}

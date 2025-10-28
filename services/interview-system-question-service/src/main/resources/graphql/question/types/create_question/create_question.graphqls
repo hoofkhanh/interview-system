@@ -1,0 +1,9 @@
+type CreateQuestionPayload{
+	baseQuestion: BaseQuestionPayload!
+}
+
+type CreateQuestionApiPayload{
+	metadata: BaseApiPayload!
+	status: QuestionApiStatusType
+	payload: CreateQuestionPayload
+}

@@ -5,6 +5,7 @@ enum SigninApiStatusType{
 
 type SigninPayload{
 	accessToken: String!
+	refreshToken: String!
 }
 
 type SigninApiPayload{

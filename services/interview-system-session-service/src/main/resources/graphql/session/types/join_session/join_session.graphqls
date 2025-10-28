@@ -1,0 +1,16 @@
+type MemberPayload{
+	userId: ID!
+	fullName: String!
+	roleName: String!
+}
+
+type JoinSessionPayload{
+	members: [MemberPayload!]!
+	baseSession: BaseSessionPayload!
+}
+
+type JoinSessionApiPayload{
+	metadata: BaseApiPayload!
+	status: SessionApiStatusType
+	payload: JoinSessionPayload
+}

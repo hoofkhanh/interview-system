@@ -1,0 +1,11 @@
+type BasePagePayload{
+	size: Int!
+	page: Int!
+	totalElements: Int!
+	totalPages: Int!
+}
+
+type SessionsPayload{
+	basePage: BasePagePayload!
+	baseSessions: [BaseSessionPayload!] !
+}

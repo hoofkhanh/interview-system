@@ -3,6 +3,6 @@ type Mutation {
 	verifyInterviewerSignupOtp(input: VerifyInterviewerSignupOtpInput!): VerifyInterviewerSignupOtpApiPayload!
 	signupCandidate(input: SignupCandidateInput!): SignupCandidateApiPayload!
 	signin(input: SigninInput!): SigninApiPayload!
-	logout: LogoutApiPayload!
-	refreshToken: RefreshTokenApiPayload!
+	logout(refreshToken: String!): LogoutApiPayload!
+	refreshToken(refreshToken: String!): RefreshTokenApiPayload!
 }

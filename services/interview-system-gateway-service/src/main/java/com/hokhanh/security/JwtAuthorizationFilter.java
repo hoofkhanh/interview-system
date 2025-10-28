@@ -24,7 +24,11 @@ import reactor.core.publisher.Mono;
 
 @Component
 public class JwtAuthorizationFilter implements WebFilter{
-	private static final List<String> INTERVIEWER_REQUIRED_OPERATIONS = List.of();
+	private static final List<String> INTERVIEWER_REQUIRED_OPERATIONS = List.of(
+			"createQuestion", "updateQuestion", "deleteQuestion", "questions",
+			"createTestCase", "updateTestCase", "deleteTestCase",
+			"createSession", "updateSession", "deleteSession"
+	);
 	private static final List<String> CANDIDATE_REQUIRED_OPERATIONS = 
 		List.of
 		(

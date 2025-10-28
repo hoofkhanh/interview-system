@@ -1,0 +1,6 @@
+input BaseFileInput{
+	sessionId: ID!
+	folderId: ID
+	content: String!
+	name: String!
+}

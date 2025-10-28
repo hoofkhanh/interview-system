@@ -1,0 +1,17 @@
+type BasePagePayload{
+	size: Int!
+	page: Int!
+	totalElements: Int!
+	totalPages: Int!
+}
+
+type QuestionsPayload{
+	basePage: BasePagePayload!
+	baseQuestions: [BaseQuestionPayload!] !
+}
+
+type QuestionsApiPayload{
+	metadata: BaseApiPayload!
+	status: QuestionApiStatusType
+	payload: QuestionsPayload
+}

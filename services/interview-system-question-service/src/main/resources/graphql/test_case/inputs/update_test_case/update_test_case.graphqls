@@ -1,0 +1,4 @@
+input UpdateTestCaseInput{
+	id: ID!
+	baseTestCase: BaseTestCaseInput!
+}

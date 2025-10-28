@@ -12,8 +12,9 @@ public class CookieUtil {
 	public static void setHttpOnlyCookie(WebGraphQlResponse response, String name, String value, Duration ttl, String path) {
         ResponseCookie cookie = ResponseCookie.from(name, value)
             .httpOnly(true)
-            .secure(true)         
-            .path(path)
+            .secure(false)         
+            .path("/")
+            .domain("localhost") 
             .maxAge(ttl)
             .sameSite("None")   
             .build();

@@ -1,0 +1,5 @@
+type Query{
+	questions(input: QuestionsInput!): QuestionsApiPayload!
+	question(input: QuestionInput!): QuestionApiPayload!
+	creatorIdByIdInternal(id: ID!): ID
+}

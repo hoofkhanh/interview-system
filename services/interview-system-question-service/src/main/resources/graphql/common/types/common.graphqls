@@ -1,0 +1,19 @@
+type BaseApiPayload{
+	success: Boolean!
+	message: String!
+}
+
+type BaseTestCasePayload{
+	id: ID!
+	input: String!
+	output: String!
+	isHidden: Boolean!	
+}
+
+type BaseQuestionPayload{
+	id: ID!
+	creatorId: ID!
+	title: String!
+	description: String!
+	createdAt: String!
+}

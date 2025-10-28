@@ -1,0 +1,4 @@
+input UpdateSharedFileInput{
+	baseFile: BaseFileInput!
+	id: ID!
+}

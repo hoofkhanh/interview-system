@@ -33,34 +33,34 @@ public class AuthMapper {
 				.build();
 	}
 	
-	public VerifyInterviewerSignupOtpPayload toVerifyInterviewerSignupOtpPayload(Auth auth, String accessToken, CreateOrUpdateUserPayload payload) {
+	public VerifyInterviewerSignupOtpPayload toVerifyInterviewerSignupOtpPayload(Auth auth, String accessToken, String refreshToken, CreateOrUpdateUserPayload payload) {
 		return new VerifyInterviewerSignupOtpPayload(
-			new BaseAuthPayload(
-				auth.getId(),
-				new RolePayload(auth.getRole().getId(), auth.getRole().getName()),
-				auth.getUserId(),
-				payload.baseUser().email(),
-				payload.baseUser().fullName()
-			),
-			accessToken
+			toBaseAuthPayload(auth, payload),
+			accessToken,
+			refreshToken
 		);
 	}
 	
-	public SignupCandidatePayload toSignupCandidatePayload(Auth auth, String accessToken, CreateOrUpdateUserPayload payload) {
+	public SignupCandidatePayload toSignupCandidatePayload(Auth auth, String accessToken, String refreshToken, CreateOrUpdateUserPayload payload) {
 		return new SignupCandidatePayload(
-			new BaseAuthPayload(
-				auth.getId(),
-				new RolePayload(auth.getRole().getId(), auth.getRole().getName()),
-				auth.getUserId(),
-				payload.baseUser().email(),
-				payload.baseUser().fullName()
-			),
-			accessToken
+			toBaseAuthPayload(auth, payload),
+			accessToken,
+			refreshToken
 		);
 	}
+	
+	private BaseAuthPayload toBaseAuthPayload(Auth auth, CreateOrUpdateUserPayload payload) {
+	    return new BaseAuthPayload(
+	        auth.getId(),
+	        new RolePayload(auth.getRole().getId(), auth.getRole().getName()),
+	        auth.getUserId(),
+	        payload.baseUser().email(),
+	        payload.baseUser().fullName()
+	    );
+	}
 
-	public SigninPayload toSigninPayload(String accessToken) {
-		return new SigninPayload(accessToken);
+	public SigninPayload toSigninPayload(String accessToken, String refreshToken) {
+		return new SigninPayload(accessToken, refreshToken);
 	}
 
 	public RefreshTokenPayload toRefreshTokenPayload(String accessToken) {

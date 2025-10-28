@@ -1,0 +1,3 @@
+input CreateSharedFileInput{
+	baseFile: BaseFileInput!
+}

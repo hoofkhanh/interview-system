@@ -1,0 +1,6 @@
+type BaseFilePayload{
+	id: ID!
+	folderId: ID
+	content: String!
+	name: String!
+}

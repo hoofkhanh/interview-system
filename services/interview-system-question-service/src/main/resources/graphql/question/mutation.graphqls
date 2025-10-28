@@ -1,0 +1,5 @@
+type Mutation{
+	createQuestion(input: CreateQuestionInput!): CreateQuestionApiPayload!
+	updateQuestion(input: UpdateQuestionInput!): UpdateQuestionApiPayload!
+	deleteQuestion(input: DeleteQuestionInput!): DeleteQuestionApiPayload!
+}

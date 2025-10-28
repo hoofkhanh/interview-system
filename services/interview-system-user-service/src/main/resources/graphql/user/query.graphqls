@@ -1,3 +1,4 @@
 type Query{
 	userByEmailInternal(email: String!): UserByEmailPayload!
+	usersByIdInternal(ids: [ID!]!): [UserByEmailPayload!]!
 }

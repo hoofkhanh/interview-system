@@ -1,0 +1,4 @@
+type Query{
+	creatorIdByIdInternal(id: ID!): ID
+	sessions(page: Int!, size: Int!): SessionsPayload!
+}

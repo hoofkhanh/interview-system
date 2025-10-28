@@ -4,7 +4,8 @@ import com.hokhanh.auth.response.common.BaseAuthPayload;
 
 public record VerifyInterviewerSignupOtpPayload(
 	BaseAuthPayload baseAuth,
-	String accessToken
+	String accessToken,
+	String refreshToken
 ) {
 
 }
