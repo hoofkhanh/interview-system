@@ -16,6 +16,8 @@ jobs:
       interview-system-user-service: ${{ steps.filter.outputs.user-service }}
       interview-system-auth-service: ${{ steps.filter.outputs.auth-service }}
       interview-system-gateway-service: ${{ steps.filter.outputs.gateway-service }}
+      interview-system-question-service: ${{ steps.filter.outputs.question-service }}
+      interview-system-session-service: ${{ steps.filter.outputs.session-service }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -45,6 +47,14 @@ jobs:
               - 'services/interview-system-gateway-service/**'
               - 'commons/**'
               - 'pom.xml'
+            question-service:
+              - 'services/interview-system-question-service/**'
+              - 'commons/**'
+              - 'pom.xml'
+            session-service:
+              - 'services/interview-system-session-service/**'
+              - 'commons/**'
+              - 'pom.xml'
 
   build-and-push:
     needs: filter
@@ -57,6 +67,8 @@ jobs:
           - interview-system-user-service
           - interview-system-auth-service
           - interview-system-gateway-service
+          - interview-system-question-service
+          - interview-system-session-service
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
