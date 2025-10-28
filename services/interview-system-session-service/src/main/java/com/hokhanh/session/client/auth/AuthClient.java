@@ -22,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 @Component
 @RequiredArgsConstructor
 public class AuthClient {
-
+//a
 	private final RestTemplate restTemplate;
 
 	@Value("${auth-service.base-url}")
