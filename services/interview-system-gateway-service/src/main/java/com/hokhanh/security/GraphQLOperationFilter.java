@@ -59,6 +59,7 @@ public class GraphQLOperationFilter implements WebFilter{
 		ServerHttpRequest request = exchange.getRequest();
 		
 		String path = request.getURI().getPath();
+		
 		if (path.endsWith(graphqlPath) && (request.getMethod() == HttpMethod.POST || request.getMethod() == HttpMethod.GET)) {
 			return DataBufferUtils.join(request.getBody()).flatMap(dataBuffer -> {
 	            byte[] bytes = new byte[dataBuffer.readableByteCount()];
