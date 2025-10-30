@@ -133,6 +133,22 @@ services:
     environment:
       <<: *common-env
       HOST_NAME: discovery-server
+      OTHER_ADDRESS_PORT: 10.120.136.105:9110
+    depends_on:
+      -  config-server
+    restart: unless-stopped
+    networks:
+      - interview-system-net
+      
+  discovery-server-2:
+    image: hoofkhanh/interview-system-discovery-server:1.0.0
+    container_name: interview-system-discovery-server-2
+    ports:
+      -  9110:9110
+    environment:
+      <<: *common-env
+      HOST_NAME: discovery-server-2
+      OTHER_ADDRESS_PORT: 10.120.136.105:9001
     depends_on:
       -  config-server
     restart: unless-stopped

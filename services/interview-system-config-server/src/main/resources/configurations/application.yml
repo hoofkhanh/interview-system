@@ -3,7 +3,8 @@ eureka:
     hostname: ${HOST_NAME:localhost}
   client:
     service-url:
-      defaultZone: http://${EUREKA_HOST:localhost}:9001/eureka
+#      defaultZone: http://${EUREKA_HOST:localhost}:9001/eureka
+      defaultZone: http://10.120.136.105:9001/eureka/,http://10.120.136.105:9110/eureka/
 
 spring:
   graphql:
