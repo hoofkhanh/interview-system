@@ -8,4 +8,4 @@ eureka:
       defaultZone: http://${OTHER_ADDRESS:${eureka.instance.hostname}:${server.port}}/eureka/
       
 server:
-  port: ${PORT}
+  port: ${PORT:9001}

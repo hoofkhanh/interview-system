@@ -1,5 +1,5 @@
 x-common-environment: &common-env
-  EUREKA_HOST: discovery-server
+  EUREKA_HOST: http://10.120.136.105:9001/eureka/,http://10.120.136.62:9110/eureka/
   CONFIG_SERVER_HOST: config-server
   
 x-jwt-environment: &jwt-env
@@ -133,24 +133,8 @@ services:
     environment:
       <<: *common-env
       HOST_NAME: discovery-server
-      OTHER_ADDRESS: 10.120.136.105:9110
+      OTHER_ADDRESS: 10.120.136.62:9110
       PORT: 9001
-    depends_on:
-      -  config-server
-    restart: unless-stopped
-    networks:
-      - interview-system-net
-      
-  discovery-server-2:
-    image: hoofkhanh/interview-system-discovery-server:1.0.0
-    container_name: interview-system-discovery-server-2
-    ports:
-      -  9110:9110
-    environment:
-      <<: *common-env
-      HOST_NAME: discovery-server-2
-      OTHER_ADDRESS: 10.120.136.105:9001
-      PORT: 9110
     depends_on:
       -  config-server
     restart: unless-stopped
