@@ -1,5 +1,5 @@
 x-common-environment: &common-env
-  EUREKA_HOST: http://10.120.136.105:9001/eureka/,http://10.120.136.62:9110/eureka/
+  EUREKA_HOST: http://192.168.1.33:9001/eureka/,http://192.168.1.35:9110/eureka/
   CONFIG_SERVER_HOST: config-server
   
 x-jwt-environment: &jwt-env
@@ -133,7 +133,7 @@ services:
     environment:
       <<: *common-env
       HOST_NAME: discovery-server
-      OTHER_ADDRESS: 10.120.136.62:9110
+      OTHER_ADDRESS: 192.168.1.35:9110
       PORT: 9001
     depends_on:
       -  config-server
