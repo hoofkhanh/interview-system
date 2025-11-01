@@ -12,3 +12,9 @@ spring:
       path: /graphiql
     http:
       path: /graphql
+      
+management:
+  metrics:
+    binders:
+      system:
+        enabled: false
