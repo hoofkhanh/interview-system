@@ -89,3 +89,5 @@ build/
 Thumbs.db
 *.tmp
 *.swp
+
+configs/
