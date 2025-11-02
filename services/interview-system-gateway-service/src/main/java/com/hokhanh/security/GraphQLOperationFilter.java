@@ -32,7 +32,6 @@ import graphql.language.OperationDefinition;
 import graphql.language.Selection;
 import graphql.parser.InvalidSyntaxException;
 import graphql.parser.Parser;
-import lombok.extern.slf4j.Slf4j;
 
 
 @Component
