@@ -7,6 +7,7 @@ import org.springframework.web.server.WebFilterChain;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hokhanh.question.controller.QuestionController;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -32,6 +33,7 @@ import graphql.language.OperationDefinition;
 import graphql.language.Selection;
 import graphql.parser.InvalidSyntaxException;
 import graphql.parser.Parser;
+import lombok.extern.slf4j.Slf4j;
 
 
 @Component
@@ -56,6 +58,7 @@ public class GraphQLOperationFilter implements WebFilter{
 	
 	@Override
 	public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
+		System.out.println("GATEWAY !!!");
 		ServerHttpRequest request = exchange.getRequest();
 		
 		String path = request.getURI().getPath();
