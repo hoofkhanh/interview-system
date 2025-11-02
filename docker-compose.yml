@@ -1,6 +1,8 @@
 x-common-environment: &common-env
-  EUREKA_HOST: http://192.168.1.33:9001/eureka/,http://192.168.1.35:9110/eureka/
+  EUREKA_HOST: http://10.120.136.105:9001/eureka/,http://10.120.136.62:9110/eureka/
   CONFIG_SERVER_HOST: config-server
+  DB_HOST: postgres
+  REDIS_HOST: redis
   
 x-jwt-environment: &jwt-env
   JWT_SECRET_KEY: ${JWT_SECRET_KEY}
@@ -16,12 +18,15 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       PGDATA: /var/lib/postgresql/data
     volumes:
-      - postgres:/var/lib/postgresql/data
+      - postgres:/var/lib/postgresql/data   # volume dữ liệu
+      - ./configs/postgres/postgresql.conf:/etc/postgresql/postgresql.conf
+      - ./configs/postgres/pg_hba.conf:/var/lib/postgresql/data/pg_hba.conf
     ports:
       - 5432:5432
     networks:
       - interview-system-net
     restart: unless-stopped
+    command: ["postgres", "-c", "config_file=/etc/postgresql/postgresql.conf"]
     
   pgadmin:
     container_name: interview-system-pgadmin
@@ -38,38 +43,6 @@ services:
     restart: unless-stopped
     depends_on:
       - postgres
-      
-  mongodb:
-    container_name: interview-system-mongodb
-    image: mongo:8.0.11
-    ports:
-      - 27017:27017
-    volumes:
-      - mongo:/data/db
-      - ./temp_volume/mongo/configdb:/data/configdb
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
-      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
-    networks:
-      - interview-system-net
-    restart: unless-stopped
-      
-  mongo-express:
-    container_name: interview-system-mongo-express
-    image: mongo-express:1.0.2-18
-    ports:
-      - 8081:8081
-    environment:
-      - ME_CONFIG_MONGODB_ADMINUSERNAME=${MONGO_INITDB_ROOT_USERNAME}
-      - ME_CONFIG_MONGODB_ADMINPASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
-      - ME_CONFIG_BASICAUTH_USERNAME=${ME_CONFIG_BASICAUTH_USERNAME}
-      - ME_CONFIG_BASICAUTH_PASSWORD=${ME_CONFIG_BASICAUTH_PASSWORD}
-      - ME_CONFIG_MONGODB_SERVER=mongodb
-    networks:
-      - interview-system-net
-    restart: unless-stopped
-    depends_on:
-      - mongodb
       
   mail-dev:
     container_name: interview-system-mail-dev
@@ -102,18 +75,6 @@ services:
       - redis_insight_volume_data:/data
     networks:
       - interview-system-net
-    
-#  rabbitmq:
-#    image: rabbitmq:4.1.2-management
-#    container_name: interview-system-rabbitmq
-#    ports:
-#      - 5672:5672
-#      - 15672:15672
-#    volumes:
-#      - rabbitmq_data:/var/lib/rabbitmq
-#    restart: unless-stopped
-#    networks:
-#      - interview-system-net
       
 # services
   config-server:
@@ -133,7 +94,7 @@ services:
     environment:
       <<: *common-env
       HOST_NAME: discovery-server
-      OTHER_ADDRESS: 192.168.1.35:9110
+      OTHER_ADDRESS: 10.120.136.62:9110
       PORT: 9001
     depends_on:
       -  config-server
@@ -141,57 +102,54 @@ services:
     networks:
       - interview-system-net
    
-#  user-service:
-#    image: hoofkhanh/interview-system-user-service:1.0.0
-#    container_name: interview-system-user-service
-#    ports: 
-#      - 9002:9002
-#    environment:
-#      <<: *common-env
-#      HOST_NAME: user-service
-#      DB_HOST: postgres
-#      DB_PORT: 5432
-#      DB_NAME: user
-#      DB_USERNAME: ${POSTGRES_USER}
-#      DB_PASSWORD: ${POSTGRES_PASSWORD}
-#    depends_on:
-#      -  config-server
-#      -  discovery-server
-#      -  postgres
-#    restart: unless-stopped
-#    networks:
-#      - interview-system-net
-#      
-#  auth-service:
-#    image: hoofkhanh/interview-system-auth-service:1.0.0
-#    container_name: interview-system-auth-service
-#    ports: 
-#      - 9003:9003
-#    environment:
-#      <<: [*common-env, *jwt-env]
-#      HOST_NAME: auth-service
-#      DB_HOST: postgres
-#      DB_PORT: 5432
-#      DB_NAME: auth
-#      DB_USERNAME: ${POSTGRES_USER}
-#      DB_PASSWORD: ${POSTGRES_PASSWORD}
-#      REDIS_HOST: redis
-#      REDIS_PORT: 6379
-#      REDIS_DB: 0
-#      MAIL_HOST: mail-dev
-#      MAIL_PORT: 1025
-#      MAIL_USERNAME: ${MAIL_USERNAME}
-#      MAIL_PASSWORD: ${MAIL_PASSWORD}
-#    depends_on:
-#      - config-server
-#      - discovery-server
-#      - postgres
-#      - redis
-#      - mail-dev
-#    restart: unless-stopped
-#    networks:
-#      - interview-system-net
-#      
+  user-service:
+    image: hoofkhanh/interview-system-user-service:1.0.0
+    container_name: interview-system-user-service
+    ports: 
+      - 9002:9002
+    environment:
+      <<: *common-env
+      HOST_NAME: user-service
+      DB_PORT: 5432
+      DB_NAME: user
+      DB_USERNAME: ${POSTGRES_USER}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+    depends_on:
+      -  config-server
+      -  discovery-server
+      -  postgres
+    restart: unless-stopped
+    networks:
+      - interview-system-net
+      
+  auth-service:
+    image: hoofkhanh/interview-system-auth-service:1.0.0
+    container_name: interview-system-auth-service
+    ports: 
+      - 9003:9003
+    environment:
+      <<: [*common-env, *jwt-env]
+      HOST_NAME: auth-service
+      DB_PORT: 5432
+      DB_NAME: auth
+      DB_USERNAME: ${POSTGRES_USER}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      REDIS_PORT: 6379
+      REDIS_DB: 0
+      MAIL_HOST: mail-dev
+      MAIL_PORT: 1025
+      MAIL_USERNAME: ${MAIL_USERNAME}
+      MAIL_PASSWORD: ${MAIL_PASSWORD}
+    depends_on:
+      - config-server
+      - discovery-server
+      - postgres
+      - redis
+      - mail-dev
+    restart: unless-stopped
+    networks:
+      - interview-system-net
+ 
   gateway-service:
     image: hoofkhanh/interview-system-gateway-service:1.0.0
     container_name: interview-system-gateway-service
@@ -206,52 +164,49 @@ services:
     restart: unless-stopped
     networks:
       - interview-system-net
-#      
-#  question-service:
-#    image: hoofkhanh/interview-system-question-service:1.0.0
-#    container_name: interview-system-question-service
-#    ports: 
-#      - 9005:9005
-#    environment:
-#      <<: *common-env
-#      HOST_NAME: question-service
-#      DB_HOST: postgres
-#      DB_PORT: 5432
-#      DB_NAME: question
-#      DB_USERNAME: ${POSTGRES_USER}
-#      DB_PASSWORD: ${POSTGRES_PASSWORD}
-#    depends_on:
-#      - config-server
-#      - discovery-server
-#      - postgres
-#    restart: unless-stopped
-#    networks:
-#      - interview-system-net
-#      
-#  session-service:
-#    image: hoofkhanh/interview-system-session-service:1.0.0
-#    container_name: interview-system-session-service
-#    ports: 
-#      - 9006:9006
-#    environment:
-#      <<: *common-env
-#      HOST_NAME: session-service
-#      DB_HOST: postgres
-#      DB_PORT: 5432
-#      DB_NAME: session
-#      DB_USERNAME: ${POSTGRES_USER}
-#      DB_PASSWORD: ${POSTGRES_PASSWORD}
-#      REDIS_HOST: redis
-#      REDIS_PORT: 6379
-#      REDIS_DB: 1
-#    depends_on:
-#      - config-server
-#      - discovery-server
-#      - postgres
-#      - redis
-#    restart: unless-stopped
-#    networks:
-#      - interview-system-net
+      
+  question-service:
+    image: hoofkhanh/interview-system-question-service:1.0.0
+    container_name: interview-system-question-service
+    ports: 
+      - 9005:9005
+    environment:
+      <<: *common-env
+      HOST_NAME: question-service
+      DB_PORT: 5432
+      DB_NAME: question
+      DB_USERNAME: ${POSTGRES_USER}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+    depends_on:
+      - config-server
+      - discovery-server
+      - postgres
+    restart: unless-stopped
+    networks:
+      - interview-system-net
+      
+  session-service:
+    image: hoofkhanh/interview-system-session-service:1.0.0
+    container_name: interview-system-session-service
+    ports: 
+      - 9006:9006
+    environment:
+      <<: *common-env
+      HOST_NAME: session-service
+      DB_PORT: 5432
+      DB_NAME: session
+      DB_USERNAME: ${POSTGRES_USER}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      REDIS_PORT: 6379
+      REDIS_DB: 1
+    depends_on:
+      - config-server
+      - discovery-server
+      - postgres
+      - redis
+    restart: unless-stopped
+    networks:
+      - interview-system-net
       
 networks:
   interview-system-net:

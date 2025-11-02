@@ -27,9 +27,11 @@ import graphql.GraphQLContext;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @RequiredArgsConstructor
+@Slf4j
 public class AuthController {
 	private final AuthService authService;
 	
@@ -55,6 +57,7 @@ public class AuthController {
 	
 	@MutationMapping
 	public SigninApiPayload signin(@Argument @Valid SigninInput input, GraphQLContext context) {
+		log.info("SIGNIN !!!");
 		return authService.signin(input, context);
 	}
 	
@@ -62,8 +65,7 @@ public class AuthController {
 	public LogoutApiPayload logout(@Argument String refreshToken,
 			@ContextValue(name = AuthenticationConstants.AUTHORIZATION_CONTEXT_KEY, required = false) String authorization,
 			GraphQLContext context) {
-		System.out.println("authorization: "+ authorization);
-		System.out.println("rf: "+ refreshToken);
+		log.info("LOGOUT !!!");
 		if(refreshToken == null || refreshToken.isBlank() || authorization == null || authorization.isBlank()) {
 			return new LogoutApiPayload(new BaseApiPayload(false, "Missing refreshToken or authorization"));
 		}

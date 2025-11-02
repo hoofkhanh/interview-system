@@ -24,15 +24,18 @@ import com.hokhanh.question.service.QuestionService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @RequiredArgsConstructor
+@Slf4j
 public class QuestionController {
 	private final QuestionService service;
 
 	@MutationMapping
 	public CreateQuestionApiPayload createQuestion(@Argument @Valid CreateQuestionInput input,
 			@ContextValue(name = HttpHeadersConstants.HEADER_USER_ID) UUID userId) {
+		log.info("CREATE QUESTION !!!");
 		return service.createQuestion(input, userId);
 	}
 	
