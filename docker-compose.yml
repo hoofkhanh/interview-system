@@ -4,6 +4,7 @@ x-common-environment: &common-env
   DB_HOST: postgres
   REDIS_HOST: redis
   MAIL_HOST: mail-dev
+  IP_ADDRESS: 10.120.136.105
   
 x-jwt-environment: &jwt-env
   JWT_SECRET_KEY: ${JWT_SECRET_KEY}
