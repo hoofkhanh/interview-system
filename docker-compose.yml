@@ -3,6 +3,7 @@ x-common-environment: &common-env
   CONFIG_SERVER_HOST: config-server
   DB_HOST: postgres
   REDIS_HOST: redis
+  MAIL_HOST: mail-dev
   
 x-jwt-environment: &jwt-env
   JWT_SECRET_KEY: ${JWT_SECRET_KEY}
@@ -136,7 +137,6 @@ services:
       DB_PASSWORD: ${POSTGRES_PASSWORD}
       REDIS_PORT: 6379
       REDIS_DB: 0
-      MAIL_HOST: mail-dev
       MAIL_PORT: 1025
       MAIL_USERNAME: ${MAIL_USERNAME}
       MAIL_PASSWORD: ${MAIL_PASSWORD}
