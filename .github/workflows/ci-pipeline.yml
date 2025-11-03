@@ -1,4 +1,4 @@
-name: Build and Push Changed Microservices
+name: CI Build
 
 on:
   push:

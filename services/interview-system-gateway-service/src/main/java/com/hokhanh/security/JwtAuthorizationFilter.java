@@ -27,7 +27,7 @@ public class JwtAuthorizationFilter implements WebFilter{
 	private static final List<String> INTERVIEWER_REQUIRED_OPERATIONS = List.of(
 			"createQuestion", "updateQuestion", "deleteQuestion", "questions",
 			"createTestCase", "updateTestCase", "deleteTestCase",
-			"createSession", "updateSession", "deleteSession"
+			"createSession", "updateSession", "deleteSession", "endSession"
 	);
 	private static final List<String> CANDIDATE_REQUIRED_OPERATIONS = 
 		List.of

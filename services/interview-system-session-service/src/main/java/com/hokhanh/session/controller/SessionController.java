@@ -1,22 +1,18 @@
 package com.hokhanh.session.controller;
 
-import java.util.List;
 import java.util.UUID;
 
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.ContextValue;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
-import org.springframework.graphql.data.method.annotation.SubscriptionMapping;
 import org.springframework.stereotype.Controller;
 
 import com.hokhanh.common.httpHeader.HttpHeadersConstants;
-import com.hokhanh.session.model.Session;
 import com.hokhanh.session.request.session.createSession.CreateSessionInput;
 import com.hokhanh.session.request.session.deleteSession.DeleteSessionInput;
 import com.hokhanh.session.request.session.joinSession.JoinSessionInput;
 import com.hokhanh.session.request.session.updateSession.UpdateSessionInput;
-import com.hokhanh.session.response.session.common.BaseSessionPayload;
 import com.hokhanh.session.response.session.createSession.CreateSessionApiPayload;
 import com.hokhanh.session.response.session.deleteSession.DeleteSessionApiPayload;
 import com.hokhanh.session.response.session.joinSession.JoinSessionApiPayload;
@@ -62,4 +58,9 @@ public class SessionController {
 		return service.sessions(page, size, userId);
 	}
 	
+	@MutationMapping
+	public UUID endSession(@Argument String sessionId,
+			@ContextValue(name = HttpHeadersConstants.HEADER_USER_ID) UUID userId) {
+		return service.endSession(sessionId, userId);
+	}
 }

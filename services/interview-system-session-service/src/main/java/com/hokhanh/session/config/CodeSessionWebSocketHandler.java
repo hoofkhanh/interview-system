@@ -12,6 +12,7 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -50,19 +51,28 @@ public class CodeSessionWebSocketHandler extends TextWebSocketHandler {
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         JsonNode json = objectMapper.readTree(message.getPayload());
         String type = json.get("type").asText();
-        String sessionId = getSessionId(session); // lấy từ session
+        String sessionId = getSessionId(session);
 
         if ("codeUpdate".equals(type)) {
             String newCode = json.get("content").asText();
             sessionCodeManager.setCode(sessionId, newCode);
-
-            // Gửi update cho tất cả client khác
             broadcastToSession(sessionId,
                 objectMapper.writeValueAsString(Map.of("type", "codeUpdate", "code", newCode)),
                 session
             );
+        } else if ("sessionEnded".equals(type)) {
+            // Gửi thông báo kết thúc tới tất cả mọi người trong session
+            broadcastToSessionAll(sessionId,
+                objectMapper.writeValueAsString(Map.of("type", "sessionEnded"))
+            );
+
+            // (Tuỳ chọn) Đóng toàn bộ kết nối sau khi đã thông báo
+            // closeAllClients(sessionId);
         }
     }
+    
+   
+    
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
@@ -80,19 +90,41 @@ public class CodeSessionWebSocketHandler extends TextWebSocketHandler {
     }
 
     private void broadcastToSession(String sessionId, String msg, WebSocketSession sender) {
-        Set<WebSocketSession> clients = sessionClients.get(sessionId);
-        if (clients != null) {
-            for (WebSocketSession ws : clients) {
-                if (ws.isOpen() && ws != sender) {
-                    try { ws.sendMessage(new TextMessage(msg)); } 
-                    catch (IOException e) { e.printStackTrace(); }
-                }
-            }
-        }
-    }
+    	  Set<WebSocketSession> clients = sessionClients.get(sessionId);
+    	  if (clients == null) return;
+    	  for (WebSocketSession ws : clients) {
+    	    if (!ws.isOpen() || ws == sender) continue;
+    	    try { ws.sendMessage(new TextMessage(msg)); }
+    	    catch (IOException e) { try { ws.close(); } catch (IOException ignore) {} }
+    	  }
+    	}
 
     private String getSessionId(WebSocketSession session) {
         // Ví dụ lấy sessionId từ query param: ws://localhost:8080/ws?sessionId=abc
         return session.getUri().getQuery().split("=")[1];
     }
+    
+    public void notifySessionEnded(String sessionId) throws JsonProcessingException {
+    	  broadcastToSessionAll(sessionId, objectMapper.writeValueAsString(Map.of("type", "sessionEnded")));
+    	  closeAllClients(sessionId);
+    	}
+
+    
+    private void broadcastToSessionAll(String sessionId, String msg) {
+    	  Set<WebSocketSession> clients = sessionClients.get(sessionId);
+    	  if (clients == null) return;
+    	  for (WebSocketSession ws : clients) {
+    	    if (!ws.isOpen()) continue;
+    	    try { ws.sendMessage(new TextMessage(msg)); }
+    	    catch (IOException e) { try { ws.close(); } catch (IOException ignore) {} }
+    	  }
+    	}
+    
+    private void closeAllClients(String sessionId) {
+	  Set<WebSocketSession> clients = sessionClients.get(sessionId);
+	  if (clients != null) {
+	    for (WebSocketSession ws : clients) { try { ws.close(); } catch (IOException ignore) {} }
+	  }
+	  sessionClients.remove(sessionId);
+	}
 }

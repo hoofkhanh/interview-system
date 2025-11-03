@@ -1,7 +1,7 @@
 eureka:
   instance:
     prefer-ip-address: true
-    ip-address: ${IP_ADDRESS}
+    ip-address: ${IP_ADDRESS:127.0.0.1}
     hostname: ${HOST_NAME:localhost}
   client:
     service-url:

@@ -3,4 +3,5 @@ type Mutation{
 	updateSession(input: UpdateSessionInput!): UpdateSessionApiPayload!
 	deleteSession(input:DeleteSessionInput!): DeleteSessionApiPayload!
 	joinSession(input:JoinSessionInput!): JoinSessionApiPayload! 
+	endSession(sessionId: String!): String
 }

@@ -219,6 +219,18 @@ public class SessionService {
 		Page<Session> session = sessionRepo.findByCreatorId(userId,  PageRequest.of(page, size));
 		return sessionMapper.toSessions(session);
 	}
+
+	public UUID endSession(String sessionId, UUID userId) {
+		Session session = sessionRepo.findById(UUID.fromString(sessionId)).orElse(null);
+		if(session != null) {
+			session.setStatus(Status.ENDED);
+			session.setEndTime(LocalDateTime.now());
+			sessionRepo.save(session);
+			return session.getId();
+		}
+		
+		return null;
+	}
 	
 
 }
