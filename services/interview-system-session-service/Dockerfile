@@ -12,4 +12,6 @@ FROM eclipse-temurin:17-jdk
 WORKDIR /app
 COPY --from=build /build/services/interview-system-session-service/target/*.jar /app/session-service.jar
 EXPOSE 9006
-ENTRYPOINT ["java", "-jar", "session-service.jar"]
+ENV TZ=Asia/Ho_Chi_Minh
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+ENTRYPOINT ["java", "-Duser.timezone=Asia/Ho_Chi_Minh", "-jar", "session-service.jar"]
