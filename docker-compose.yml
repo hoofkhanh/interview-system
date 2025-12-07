@@ -62,10 +62,12 @@ services:
     restart: unless-stopped
     volumes:
       - redis_volume_data:/data
+      - ./configs/redis.conf:/usr/local/etc/redis/redis.conf
     ports:
       - 6379:6379
     networks:
       - interview-system-net
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
       
   redis_insight:
     image: redis/redisinsight:2.70
