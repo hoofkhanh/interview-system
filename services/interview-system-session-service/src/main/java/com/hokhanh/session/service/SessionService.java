@@ -176,7 +176,7 @@ public class SessionService {
 				SessionApiStatusType.SESSION_NOT_FOUND,
 				null
 			);
-		}else if(session.getStartTime().isBefore(LocalDateTime.now())) {
+		}else if(!session.getStartTime().isBefore(LocalDateTime.now())) {
 			return new JoinSessionApiPayload(
 				new BaseApiPayload(false, "Session pending"),
 				SessionApiStatusType.SESSION_PENDING,
